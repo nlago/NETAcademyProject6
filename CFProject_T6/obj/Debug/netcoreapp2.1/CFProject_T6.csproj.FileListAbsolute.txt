@@ -30,3 +30,8 @@ C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp
 C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp2.1\CFProject_T6.dll
 C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp2.1\CFProject_T6.pdb
 C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp2.1\CFProject_T6.csproj.CopyComplete
+C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp2.1\Razor\Views\Packages\Create.g.cshtml.cs
+C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp2.1\Razor\Views\Packages\Delete.g.cshtml.cs
+C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp2.1\Razor\Views\Packages\Details.g.cshtml.cs
+C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp2.1\Razor\Views\Packages\Edit.g.cshtml.cs
+C:\Users\sniperblade\source\repos\CFProject_T6\CFProject_T6\obj\Debug\netcoreapp2.1\Razor\Views\Packages\Index.g.cshtml.cs

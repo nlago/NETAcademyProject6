@@ -30,8 +30,6 @@ namespace CFProject_T6.Models
             {
                 entity.ToTable("Backers_projects");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.PackageId).HasColumnName("Package_Id");
 
                 entity.Property(e => e.ProjectId).HasColumnName("Project_Id");
@@ -59,8 +57,6 @@ namespace CFProject_T6.Models
 
             modelBuilder.Entity<Categories>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -69,8 +65,6 @@ namespace CFProject_T6.Models
 
             modelBuilder.Entity<Packages>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.DonationUpperlim)
                     .HasColumnName("Donation_upperlim")
                     .HasColumnType("decimal(18, 0)");
@@ -91,8 +85,6 @@ namespace CFProject_T6.Models
 
             modelBuilder.Entity<Photos>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Filename)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -109,8 +101,6 @@ namespace CFProject_T6.Models
 
             modelBuilder.Entity<Projects>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.CategoryId).HasColumnName("Category_Id");
 
                 entity.Property(e => e.CreatorId).HasColumnName("Creator_Id");
@@ -146,8 +136,6 @@ namespace CFProject_T6.Models
 
             modelBuilder.Entity<Updates>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Descr)
                     .IsRequired()
                     .HasColumnType("ntext");
@@ -165,8 +153,6 @@ namespace CFProject_T6.Models
 
             modelBuilder.Entity<Users>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(320)
@@ -188,8 +174,6 @@ namespace CFProject_T6.Models
 
             modelBuilder.Entity<Videos>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Filename)
                     .IsRequired()
                     .HasMaxLength(50)

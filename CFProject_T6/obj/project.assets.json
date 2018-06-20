@@ -12226,23 +12226,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sniperblade\\.nuget\\packages\\": {},
+    "C:\\Users\\aeon-laptop\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sniperblade\\source\\repos\\CFProject_T6\\CFProject_T6\\CFProject_T6.csproj",
+      "projectUniqueName": "C:\\Users\\aeon-laptop\\Source\\Repos\\NETAcademyProject6\\CFProject_T6\\CFProject_T6.csproj",
       "projectName": "CFProject_T6",
-      "projectPath": "C:\\Users\\sniperblade\\source\\repos\\CFProject_T6\\CFProject_T6\\CFProject_T6.csproj",
-      "packagesPath": "C:\\Users\\sniperblade\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sniperblade\\source\\repos\\CFProject_T6\\CFProject_T6\\obj\\",
+      "projectPath": "C:\\Users\\aeon-laptop\\Source\\Repos\\NETAcademyProject6\\CFProject_T6\\CFProject_T6.csproj",
+      "packagesPath": "C:\\Users\\aeon-laptop\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\aeon-laptop\\Source\\Repos\\NETAcademyProject6\\CFProject_T6\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\sniperblade\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\aeon-laptop\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

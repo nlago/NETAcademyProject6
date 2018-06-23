@@ -164,18 +164,19 @@ namespace CFProject_T6.Controllers
             return _context.Projects.Any(e => e.Id == id);
         }
 
-
+        
 
         //GET : Project/Search/5
         public async Task<IActionResult> Search(long? id)
         {
             if (id == null)
             {
-                return NotFound();
+                var projectContextNull = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
+                return View(await projectContextNull.ToListAsync());
             }
 
             var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id);
-            
+
             if (projectContext == null)
             {
                 return NotFound();
@@ -184,24 +185,26 @@ namespace CFProject_T6.Controllers
             return View(await projectContext.ToListAsync());
 
         }
+
+
 
         //GET : Project/Search/Title
-        public async Task<IActionResult> Search(string? id2)
-        {
-            if (id2 == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Search(string? id2)
+        //{
+        //    if (id2 == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Title.Contains(id2));
+        //    var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Title.Contains(id2));
 
-            if (projectContext == null)
-            {
-                return NotFound();
-            }
+        //    if (projectContext == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(await projectContext.ToListAsync());
+        //    return View(await projectContext.ToListAsync());
 
-        }
+        //}
     }
 }

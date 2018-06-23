@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,17 +27,25 @@ namespace CFProject_T6
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
 
-            var connection = @"Server=localhost\SQLEXPRESS;Database=Project;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = @"Server=localhost\SQLEXPRESS;Database=CFIdentityDb;Trusted_Connection=True;ConnectRetryCount=0";
 
             services.AddDbContext<ProjectContext>(
                 options => options.UseSqlServer(connection));
+
+            //services.AddDefaultIdentity<IdentityUser>();
+            //.AddEntityFrameworkStores<CFIdentityContext>();
+
+
+            services.AddIdentity<Users, IdentityRole<long>>()
+         .AddDefaultUI().AddDefaultTokenProviders()
+         .AddEntityFrameworkStores<ProjectContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -56,7 +65,7 @@ namespace CFProject_T6
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

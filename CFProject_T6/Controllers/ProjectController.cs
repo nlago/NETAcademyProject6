@@ -167,22 +167,39 @@ namespace CFProject_T6.Controllers
         
 
         //GET : Project/Search/5
-        public async Task<IActionResult> Search(long? id)
+        public async Task<IActionResult> Search(long? id, string title)
         {
-            if (id == null)
+
+            var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id && p.Title.Contains(title));
+
+            if (id == null && title == null)
             {
-                var projectContextNull = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
-                return View(await projectContextNull.ToListAsync());
+                projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
+            }
+            else if (id == null)
+            {
+                projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Title.Contains(title));
+            }
+            else if (title == null)
+            {
+                projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id);
             }
 
-            var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id);
+
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
 
             if (projectContext == null)
             {
                 return NotFound();
             }
+            else
+            {
+                return View(await projectContext.ToListAsync());
+            }
 
-            return View(await projectContext.ToListAsync());
+
+
+         
 
         }
 

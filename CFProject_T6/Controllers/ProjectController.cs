@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CFProject_T6.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CFProject_T6.Controllers
 {
@@ -26,9 +27,7 @@ namespace CFProject_T6.Controllers
 
             return RedirectToAction(nameof(Search));
         }
-
-      
-
+   
         // GET: Project/Details/5
         public async Task<IActionResult> Details(long? id)
         {
@@ -50,6 +49,7 @@ namespace CFProject_T6.Controllers
         }
 
         // GET: Project/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
@@ -61,6 +61,7 @@ namespace CFProject_T6.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Descr,Goalfunds,CreatorId,Fundsrecv,CategoryId,StartDate,EndDate")] Projects projects)
         {
@@ -76,6 +77,7 @@ namespace CFProject_T6.Controllers
         }
 
         // GET: Project/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -97,6 +99,7 @@ namespace CFProject_T6.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Id,Title,Descr,Goalfunds,CreatorId,Fundsrecv,CategoryId,StartDate,EndDate")] Projects projects)
         {
@@ -131,6 +134,7 @@ namespace CFProject_T6.Controllers
         }
 
         // GET: Project/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -152,6 +156,7 @@ namespace CFProject_T6.Controllers
 
         // POST: Project/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
@@ -165,8 +170,6 @@ namespace CFProject_T6.Controllers
         {
             return _context.Projects.Any(e => e.Id == id);
         }
-
-        
 
         //GET : Project/Search/5
         public async Task<IActionResult> Search(long? id, string title)
@@ -193,7 +196,6 @@ namespace CFProject_T6.Controllers
             ProjCat.Categories = _context.Categories.ToList();
             ProjCat.Projects = projectContext.ToList();
 
-
             //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
 
             if (projectContext == null)
@@ -204,15 +206,7 @@ namespace CFProject_T6.Controllers
             {
                 return View(ProjCat);
             }
-
-
-
-         
-
         }
-
-
-
         //GET : Project/Search/Title
         //public async Task<IActionResult> Search(string? id2)
         //{

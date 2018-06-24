@@ -34,7 +34,7 @@ namespace CFProject_T6
             //    options.MinimumSameSitePolicy = SameSiteMode.None;
             //});
 
-            var connection = @"Server=localhost\SQLEXPRESS;Database=CFIdentityDb;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = @"Server=SPIROS\SQLEXPRESS;Database=CFIdentityDb;Trusted_Connection=True;ConnectRetryCount=0";
 
             services.AddDbContext<ProjectContext>(
                 options => options.UseSqlServer(connection));

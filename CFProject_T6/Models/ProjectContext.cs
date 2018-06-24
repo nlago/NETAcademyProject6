@@ -1,10 +1,12 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CFProject_T6.Models
 {
-    public partial class ProjectContext : DbContext
+    public partial class ProjectContext : IdentityDbContext<Users, IdentityRole<long>, long>
     {
         public ProjectContext()
         {
@@ -26,6 +28,10 @@ namespace CFProject_T6.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //addition...
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<BackersProjects>(entity =>
             {
                 entity.ToTable("Backers_projects");
@@ -166,10 +172,19 @@ namespace CFProject_T6.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(180)
-                    .IsUnicode(false);
+                //entity.Property(e => e.Password)
+                //    .IsRequired()
+                //    .HasMaxLength(180)
+                //    .IsUnicode(false);
+                //ity.Property(e => e.Lastname)
+                //    .IsRequired()
+                //    .HasMaxLength(50);
+
+
+
+                //entity.Property(e => e.ProfileUrl).HasMaxLength(255);
+
+
             });
 
             modelBuilder.Entity<Videos>(entity =>

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace CFProject_T6.Models
 {
-    public partial class Users
+    public partial class Users:IdentityUser<long>
     {
         public Users()
         {
@@ -11,11 +12,9 @@ namespace CFProject_T6.Models
             Projects = new HashSet<Projects>();
         }
 
-        public long Id { get; set; }
         public string Fname { get; set; }
         public string Lname { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        //public string ProfileUrl { get; set; }
 
         public ICollection<BackersProjects> BackersProjects { get; set; }
         public ICollection<Projects> Projects { get; set; }

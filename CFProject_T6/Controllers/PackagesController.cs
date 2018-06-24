@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CFProject_T6.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CFProject_T6.Controllers
 {
@@ -45,9 +46,10 @@ namespace CFProject_T6.Controllers
         }
 
         // GET: Packages/Create
+
         public IActionResult Create()
         {
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Descr");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Title");
             return View();
         }
 
@@ -64,7 +66,7 @@ namespace CFProject_T6.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Descr", packages.ProjectId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Title", packages.ProjectId);
             return View(packages);
         }
 
@@ -81,7 +83,7 @@ namespace CFProject_T6.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Descr", packages.ProjectId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Title", packages.ProjectId);
             return View(packages);
         }
 
@@ -117,7 +119,7 @@ namespace CFProject_T6.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Descr", packages.ProjectId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Title", packages.ProjectId);
             return View(packages);
         }
 

@@ -33,18 +33,15 @@ namespace CFProject_T6.Controllers
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var projects = await _context.Projects
                 .Include(p => p.Category)
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (projects == null)
-            {
                 return NotFound();
-            }
 
             return View(projects);
         }
@@ -84,15 +81,12 @@ namespace CFProject_T6.Controllers
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var projects = await _context.Projects.FindAsync(id);
             if (projects == null)
-            {
                 return NotFound();
-            }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
             ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Fname", projects.CreatorId);
             return View(projects);
@@ -107,9 +101,7 @@ namespace CFProject_T6.Controllers
         public async Task<IActionResult> Edit(long id, [Bind("Id,Title,Descr,Goalfunds,CreatorId,Fundsrecv,CategoryId,StartDate,EndDate")] Projects projects)
         {
             if (id != projects.Id)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
@@ -121,13 +113,9 @@ namespace CFProject_T6.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ProjectsExists(projects.Id))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -141,18 +129,15 @@ namespace CFProject_T6.Controllers
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var projects = await _context.Projects
                 .Include(p => p.Category)
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (projects == null)
-            {
                 return NotFound();
-            }
 
             return View(projects);
         }
@@ -180,32 +165,21 @@ namespace CFProject_T6.Controllers
             var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id && p.Title.Contains(title));
             
             if (id == null && title == null)
-            {
                 projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
-            }
             else if (id == null)
-            {
                 projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Title.Contains(title));
-            }
             else if (title == null)
-            {
                 projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id);
-            }
 
             var ProjCat = new ProjectCategory();
             ProjCat.Categories = _context.Categories.ToList();
             ProjCat.Projects = projectContext.ToList();
 
-            
-
             if (projectContext == null)
-            {
                 return NotFound();
-            }
             else
-            {
                 return View(ProjCat);
-            }
+
         }
         private long GetUserID()
         {

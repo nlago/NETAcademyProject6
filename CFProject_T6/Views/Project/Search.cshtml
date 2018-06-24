@@ -1,0 +1,102 @@
+﻿@model CFProject_T6.Models.ProjectCategory
+
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Search</h2>
+
+<form class="search-tilte" method="get">
+    <lable>Search title :</lable>
+    <input type="text" id="get-title" name="title" />
+    <lable>Search Category</lable>
+
+    <select id="select-category" name="id">
+        <option value="">Choose a Category</option>
+
+        @foreach (var category in Model.Categories)
+        {
+            <option value="@category.Id">@category.Name</option>
+        }
+    </select>
+    <button type="submit" id="button-search">Search</button>
+
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Title
+                @*@Html.DisplayNameFor(model => model.Title)*@
+            </th>
+            <th>
+                Description
+                @*@Html.DisplayNameFor(model => model.Descr)*@
+            </th>
+            <th>
+                Goal Funds
+                @*@Html.DisplayNameFor(model => model.Goalfunds)*@
+            </th>
+            <th>
+                Funds so far
+                @*@Html.DisplayNameFor(model => model.Fundsrecv)*@
+            </th>
+            <th>
+                Start Date
+                @*@Html.DisplayNameFor(model => model.StartDate)*@
+            </th>
+            <th>
+                End Date
+                @*@Html.DisplayNameFor(model => model.EndDate)*@
+            </th>
+            <th>
+                Categoty
+                @*@Html.DisplayNameFor(model => model.Category)*@
+            </th>
+            <th>
+                Creator
+                @*@Html.DisplayNameFor(model => model.Creator)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Projects)
+        {
+            <tr>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.Descr
+                </td>
+                <td>
+                    @item.Goalfunds
+                </td>
+                <td>
+                    @item.Fundsrecv
+                </td>
+                <td>
+                    @item.StartDate
+                </td>
+                <td>
+                    @item.EndDate
+                </td>
+                <td>
+                    @item.Category.Name
+                </td>
+                <td>
+                    @item.Creator.Fname
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

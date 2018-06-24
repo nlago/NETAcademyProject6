@@ -51,7 +51,7 @@ namespace CFProject_T6.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Fname");
+
             return View();
         }
 
@@ -61,9 +61,10 @@ namespace CFProject_T6.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Descr,Goalfunds,CreatorId,Fundsrecv,CategoryId,StartDate,EndDate")] Projects projects)
+        public async Task<IActionResult> Create(Projects projects)
         {
             projects.CreatorId = GetUserID();
+            projects.Fundsrecv = 0;
 
             if (ModelState.IsValid)
             {
@@ -72,7 +73,6 @@ namespace CFProject_T6.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Fname", projects.CreatorId);
             return View(projects);
         }
 
@@ -87,8 +87,9 @@ namespace CFProject_T6.Controllers
             if (projects == null)
                 return NotFound();
 
+            projects.CreatorId = GetUserID();
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Fname", projects.CreatorId);
             return View(projects);
         }
 
@@ -119,8 +120,10 @@ namespace CFProject_T6.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            projects.CreatorId = GetUserID();
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
-            ViewData["CreatorId"] = new SelectList(_context.Users, "Id", "Fname", projects.CreatorId);
             return View(projects);
         }
 

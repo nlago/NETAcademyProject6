@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CFProject_T6.Models
 {
@@ -21,7 +22,9 @@ namespace CFProject_T6.Models
         public long CreatorId { get; set; }
         public decimal Fundsrecv { get; set; }
         public long CategoryId { get; set; }
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         public Categories Category { get; set; }

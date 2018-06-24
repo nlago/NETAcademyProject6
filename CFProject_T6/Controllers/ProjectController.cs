@@ -196,7 +196,7 @@ namespace CFProject_T6.Controllers
             ProjCat.Categories = _context.Categories.ToList();
             ProjCat.Projects = projectContext.ToList();
 
-            //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            
 
             if (projectContext == null)
             {
@@ -207,23 +207,6 @@ namespace CFProject_T6.Controllers
                 return View(ProjCat);
             }
         }
-        //GET : Project/Search/Title
-        //public async Task<IActionResult> Search(string? id2)
-        //{
-        //    if (id2 == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Title.Contains(id2));
-
-        //    if (projectContext == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(await projectContext.ToListAsync());
-
-        //}
+       
     }
 }

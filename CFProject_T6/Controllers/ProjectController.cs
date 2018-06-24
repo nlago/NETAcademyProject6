@@ -21,8 +21,10 @@ namespace CFProject_T6.Controllers
         // GET: Project
         public async Task<IActionResult> Index()
         {
-            var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
-            return View(await projectContext.ToListAsync());
+            //var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
+            //return View(await projectContext.ToListAsync());
+
+            return RedirectToAction(nameof(Search));
         }
 
       
@@ -171,6 +173,8 @@ namespace CFProject_T6.Controllers
         {
 
             var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id && p.Title.Contains(title));
+            
+
 
             if (id == null && title == null)
             {
@@ -185,8 +189,12 @@ namespace CFProject_T6.Controllers
                 projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id);
             }
 
+            var ProjCat = new ProjectCategory();
+            ProjCat.Categories = _context.Categories.ToList();
+            ProjCat.Projects = projectContext.ToList();
 
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+
+            //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
 
             if (projectContext == null)
             {
@@ -194,7 +202,7 @@ namespace CFProject_T6.Controllers
             }
             else
             {
-                return View(await projectContext.ToListAsync());
+                return View(ProjCat);
             }
 
 

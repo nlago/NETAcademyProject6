@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CFProject_T6.Models.Projects>
+﻿@model CFProject_T6.Models.ProjectCategory
 
 @{
     ViewData["Title"] = "Search";
@@ -7,79 +7,88 @@
 
 <h2>Search</h2>
 
-<div class="search-tilte">
+<form class="search-tilte" method="get">
     <lable>Search title :</lable>
-    <input type="text" id="get-title" />
+    <input type="text" id="get-title" name="title" />
     <lable>Search Category</lable>
 
-    <select>
-        <option value="Volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
+    <select id="select-category" name="id">
+        <option value="">Choose a Category</option>
+
+        @foreach (var category in Model.Categories)
+        {
+            <option value="@category.Id">@category.Name</option>
+        }
     </select>
+    <button type="submit" id="button-search">Search</button>
 
-    <select id="get-category" asp-items="ViewBag.CreatorId"></select>
-
-</div>
+</form>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Title
+                @*@Html.DisplayNameFor(model => model.Title)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Descr)
+                Description
+                @*@Html.DisplayNameFor(model => model.Descr)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Goalfunds)
+                Goal Funds
+                @*@Html.DisplayNameFor(model => model.Goalfunds)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fundsrecv)
+                Funds so far
+                @*@Html.DisplayNameFor(model => model.Fundsrecv)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                Start Date
+                @*@Html.DisplayNameFor(model => model.StartDate)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDate)
+                End Date
+                @*@Html.DisplayNameFor(model => model.EndDate)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                Categoty
+                @*@Html.DisplayNameFor(model => model.Category)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Creator)
+                Creator
+                @*@Html.DisplayNameFor(model => model.Creator)*@
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Projects)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    @item.Title
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Descr)
+                    @item.Descr
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Goalfunds)
+                    @item.Goalfunds
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Fundsrecv)
+                    @item.Fundsrecv
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
+                    @item.StartDate
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EndDate)
+                    @item.EndDate
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
+                    @item.Category.Name
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Creator.Fname)
+                    @item.Creator.Fname
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

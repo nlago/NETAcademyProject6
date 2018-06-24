@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CFProject_T6.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace CFProject_T6.Controllers
 {
@@ -65,6 +66,8 @@ namespace CFProject_T6.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Descr,Goalfunds,CreatorId,Fundsrecv,CategoryId,StartDate,EndDate")] Projects projects)
         {
+            projects.CreatorId = GetUserID();
+
             if (ModelState.IsValid)
             {
                 _context.Add(projects);
@@ -174,11 +177,8 @@ namespace CFProject_T6.Controllers
         //GET : Project/Search/5
         public async Task<IActionResult> Search(long? id, string title)
         {
-
             var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id && p.Title.Contains(title));
             
-
-
             if (id == null && title == null)
             {
                 projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
@@ -207,6 +207,9 @@ namespace CFProject_T6.Controllers
                 return View(ProjCat);
             }
         }
-       
+        private long GetUserID()
+        {
+            return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        }
     }
 }

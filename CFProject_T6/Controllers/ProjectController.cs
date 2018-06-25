@@ -21,7 +21,7 @@ namespace CFProject_T6.Controllers
         }
 
         // GET: Project
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             //var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
             //return View(await projectContext.ToListAsync());
@@ -163,7 +163,7 @@ namespace CFProject_T6.Controllers
         }
 
         //GET : Project/Search/5
-        public async Task<IActionResult> Search(long? id, string title)
+        public IActionResult Search(long? id, string title)
         {
             var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id && p.Title.Contains(title));
             

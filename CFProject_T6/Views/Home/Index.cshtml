@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<CFProject_T6.Models.Categories>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -56,5 +58,28 @@
 </div>
 
 <div class="row">
-    
+    <div class="col-lg-4">
+        <h4>Make yor Search by choosing one of the Categories.</h4>
+        <table class="table">
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        <a asp-controller="Project" asp-action="Search" asp-route-id="@item.Id">@item.Name</a>
+                    </th>
+                </tr>
+            }
+
+
+        </table>
+    </div>
+    <div class="col-lg-4">
+
+    </div>
+    <div class="col-lg-4">
+
+    </div>
+
 </div>

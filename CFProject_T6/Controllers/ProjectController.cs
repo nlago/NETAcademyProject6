@@ -163,16 +163,16 @@ namespace CFProject_T6.Controllers
         }
 
         //GET : Project/Search/5
-        public IActionResult Search(long? id, string title)
+        public IActionResult Search(long? idd, string title)
         {
-            var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id && p.Title.Contains(title));
+            var projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == idd && p.Title.Contains(title));
             
-            if (id == null && title == null)
+            if (idd == null && title == null)
                 projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator);
-            else if (id == null)
+            else if (idd == null)
                 projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Title.Contains(title));
             else if (title == null)
-                projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == id);
+                projectContext = _context.Projects.Include(p => p.Category).Include(p => p.Creator).Where(p => p.Category.Id == idd);
 
             var ProjCat = new ProjectCategory();
             ProjCat.Categories = _context.Categories.ToList();

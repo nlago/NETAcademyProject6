@@ -188,5 +188,18 @@ namespace CFProject_T6.Controllers
         {
             return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
+
+        [Authorize]
+        public IActionResult MyProject()
+        {
+
+            var projectContext = _context.Projects
+                                            .Include(p => p.Category)
+                                            .Include(p => p.Creator)
+                                            .Where(p => p.CreatorId == GetUserID());
+
+            return View(projectContext.ToList());
+
+        }
     }
 }

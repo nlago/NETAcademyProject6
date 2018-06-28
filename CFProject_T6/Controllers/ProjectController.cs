@@ -68,8 +68,9 @@ namespace CFProject_T6.Controllers
             projects.Project.CreatorId = GetUserID();
             projects.Project.Fundsrecv = 0;
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+<<<<<<< HEAD
                  _context.Add(projects.Project);
                 await _context.SaveChangesAsync();
 
@@ -82,6 +83,20 @@ namespace CFProject_T6.Controllers
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.Project.CategoryId);
             return View(projects);
+=======
+                return BadRequest();
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
+
+            // return View(projects);
+
+            _context.Add(projects);
+            await _context.SaveChangesAsync();
+            return Json(new {
+                title = projects.Title,
+                redirect = Url.Action("Details", "Project", new { id = projects.Id})
+            });
+>>>>>>> integration_phase1
         }
 
         // GET: Project/Edit/5
@@ -210,5 +225,27 @@ namespace CFProject_T6.Controllers
 
         }
 
+<<<<<<< HEAD
+=======
+        [Authorize]
+        public IActionResult MyFundedProjects()
+        {
+
+            var myBackedContext = _context.BackersProjects.Where(p => p.UserId == GetUserID()).Select(p => p.ProjectId).Distinct().ToList();
+            var myFundedProjects = new List<Projects>();
+            //IQueryable<Projects> myFundedProjects;
+            //var newMyFundedProjects = new List<Projects>();
+
+            foreach (var item in myBackedContext)
+            {
+                
+                myFundedProjects.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
+                                                                        .Where(p => p.Id == item).First());
+            }
+            
+            return View(myFundedProjects);
+
+        }
+>>>>>>> integration_phase1
     }
 }

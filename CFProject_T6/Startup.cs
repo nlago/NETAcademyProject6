@@ -72,6 +72,10 @@ namespace CFProject_T6
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                //routes.MapRoute(
+                //    name: "purchase",
+                //    template: "{controller=BackersProjects}/{action=Create}");
             });
         }
     }

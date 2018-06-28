@@ -20,21 +20,23 @@ namespace CFProject_T6.Controllers
         }
 
         // GET: Packages
-        public async Task<IActionResult> Index()
+        [HttpGet("Project/{project_id:long}/Packages")]
+        public async Task<IActionResult> Index(long project_id)
         {
             var projectContext = _context.Packages.Include(p => p.Project);
-            return View(await projectContext.ToListAsync());
+            return View(await projectContext.Where(t => t.ProjectId == project_id).ToListAsync());
         }
 
         // GET: Packages/Details/5
-        public async Task<IActionResult> Details(long? id)
+        [HttpGet("project/{project_id:long}/packages/details/{id}")]
+        public async Task<IActionResult> Details(long? id, long project_id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var packages = await _context.Packages
+            var packages = await _context.Packages.Where(t => t.ProjectId == project_id)
                 .Include(p => p.Project)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (packages == null)

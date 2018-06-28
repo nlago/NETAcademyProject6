@@ -9,7 +9,7 @@
 <div>
     <h4>Packages</h4>
     <hr />
-    <dl class="dl-horizontal">jhjhghghhghg
+    <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.DonationUpperlim)
         </dt>
@@ -31,6 +31,15 @@
     </dl>
 </div>
 <div>
+    @*<form asp-controller="BackersProjects" asp-action="purchase">
+            <input type="submit" value="Purchase" class="btn btn-default" />
+        </form>*@
+
+    @*<a href="@Url.RouteUrl("purchase", new { controller = "BackersProjects", action = "Create"})">Purchase</a>*@
+        
+    @*<a href="@Url.RouteUrl("purchase", new { })"> Purchase </a>*@ |
+
+    <a asp-controller="BackersProjects" asp-action="purchase">Purchase!</a> |
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

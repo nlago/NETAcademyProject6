@@ -14,10 +14,12 @@ namespace CFProject_T6.Controllers
     public class ProjectController : Controller
     {
         private readonly ProjectContext _context;
+        private readonly ProjectContext _contextpackage;
 
         public ProjectController(ProjectContext context)
         {
             _context = context;
+            _contextpackage = context;
         }
 
         // GET: Project
@@ -63,21 +65,19 @@ namespace CFProject_T6.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProjectsCreation projects)
         {
-           // var myproject = new ProjectsCreation();
-
             projects.Project.CreatorId = GetUserID();
             projects.Project.Fundsrecv = 0;
-            projects.packages.ProjectId = projects.Project.Id;
 
             if (ModelState.IsValid)
             {
-                //_context.Add(projects.projects);
-                _context.Add(projects.packages);
+                 _context.Add(projects.Project);
                 await _context.SaveChangesAsync();
 
-                _context.Add(projects.Project);
+                projects.packages.ProjectId = projects.Project.Id;
 
-                await _context.SaveChangesAsync();
+                _contextpackage.Add(projects.packages);
+                await _contextpackage.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.Project.CategoryId);

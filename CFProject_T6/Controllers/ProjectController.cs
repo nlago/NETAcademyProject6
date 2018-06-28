@@ -72,7 +72,7 @@ namespace CFProject_T6.Controllers
             {
                  _context.Add(projects.Project);
                 await _context.SaveChangesAsync();
-
+                // ηθγφθυ
                 projects.packages.ProjectId = projects.Project.Id;
 
                 _contextpackage.Add(projects.packages);

@@ -61,18 +61,26 @@ namespace CFProject_T6.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Projects projects)
+        public async Task<IActionResult> Create(ProjectsCreation projects)
         {
-            projects.CreatorId = GetUserID();
-            projects.Fundsrecv = 0;
+           // var myproject = new ProjectsCreation();
+
+            projects.Project.CreatorId = GetUserID();
+            projects.Project.Fundsrecv = 0;
+            projects.packages.ProjectId = projects.Project.Id;
 
             if (ModelState.IsValid)
             {
-                _context.Add(projects);
+                //_context.Add(projects.projects);
+                _context.Add(projects.packages);
+                await _context.SaveChangesAsync();
+
+                _context.Add(projects.Project);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.Project.CategoryId);
             return View(projects);
         }
 
@@ -201,5 +209,6 @@ namespace CFProject_T6.Controllers
             return View(projectContext.ToList());
 
         }
+
     }
 }

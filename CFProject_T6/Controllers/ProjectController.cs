@@ -66,14 +66,20 @@ namespace CFProject_T6.Controllers
             projects.CreatorId = GetUserID();
             projects.Fundsrecv = 0;
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(projects);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return BadRequest();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
-            return View(projects);
+
+            // return View(projects);
+
+            _context.Add(projects);
+            await _context.SaveChangesAsync();
+            return Json(new {
+                title = projects.Title,
+                redirect = Url.Action("Details", "Project", new { id = projects.Id})
+            });
         }
 
         // GET: Project/Edit/5

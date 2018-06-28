@@ -66,14 +66,20 @@ namespace CFProject_T6.Controllers
             projects.CreatorId = GetUserID();
             projects.Fundsrecv = 0;
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(projects);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return BadRequest();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
-            return View(projects);
+
+            // return View(projects);
+
+            _context.Add(projects);
+            await _context.SaveChangesAsync();
+            return Json(new {
+                title = projects.Title,
+                redirect = Url.Action("Details", "Project", new { id = projects.Id})
+            });
         }
 
         // GET: Project/Edit/5
@@ -199,6 +205,26 @@ namespace CFProject_T6.Controllers
                                             .Where(p => p.CreatorId == GetUserID());
 
             return View(projectContext.ToList());
+
+        }
+
+        [Authorize]
+        public IActionResult MyFundedProjects()
+        {
+
+            var myBackedContext = _context.BackersProjects.Where(p => p.UserId == GetUserID()).Select(p => p.ProjectId).Distinct().ToList();
+            var myFundedProjects = new List<Projects>();
+            //IQueryable<Projects> myFundedProjects;
+            //var newMyFundedProjects = new List<Projects>();
+
+            foreach (var item in myBackedContext)
+            {
+                
+                myFundedProjects.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
+                                                                        .Where(p => p.Id == item).First());
+            }
+            
+            return View(myFundedProjects);
 
         }
     }

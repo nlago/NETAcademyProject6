@@ -14,10 +14,13 @@ namespace CFProject_T6.Controllers
     public class ProjectController : Controller
     {
         private readonly ProjectContext _context;
+        private readonly ProjectContext _contextpackage;
+
 
         public ProjectController(ProjectContext context)
         {
             _context = context;
+            _contextpackage = context;
         }
 
         // GET: Project
@@ -61,25 +64,33 @@ namespace CFProject_T6.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Projects projects)
+        public async Task<IActionResult> Create(ProjectsCreation projects)
         {
             projects.CreatorId = GetUserID();
             projects.Fundsrecv = 0;
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return BadRequest();
+                _context.Add(projects.Project);
+                await _context.SaveChangesAsync();
+                
+                projects.packages.ProjectId = projects.Project.Id;
+
+                _contextpackage.Add(projects.packages);
+                await _contextpackage.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
 
-            // return View(projects);
+            return View(projects);
 
-            _context.Add(projects);
-            await _context.SaveChangesAsync();
-            return Json(new {
-                title = projects.Title,
-                redirect = Url.Action("Details", "Project", new { id = projects.Id})
-            });
+            //_context.Add(projects);
+            //await _context.SaveChangesAsync();
+            //return Json(new {
+            //    title = projects.Title,
+            //    redirect = Url.Action("Details", "Project", new { id = projects.Id})
+            //});
         }
 
         // GET: Project/Edit/5

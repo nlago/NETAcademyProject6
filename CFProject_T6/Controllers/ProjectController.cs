@@ -66,22 +66,22 @@ namespace CFProject_T6.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProjectsCreation projects)
         {
-            projects.CreatorId = GetUserID();
-            projects.Fundsrecv = 0;
+            projects.Project.CreatorId = GetUserID();
+            projects.Project.Fundsrecv = 0;
 
             if (ModelState.IsValid)
             {
                 _context.Add(projects.Project);
                 await _context.SaveChangesAsync();
                 
-                projects.packages.ProjectId = projects.Project.Id;
+                projects.Packages.ProjectId = projects.Project.Id;
 
-                _contextpackage.Add(projects.packages);
+                _contextpackage.Add(projects.Packages);
                 await _contextpackage.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.Project.CategoryId);
 
             return View(projects);
 

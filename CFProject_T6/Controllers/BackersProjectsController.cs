@@ -61,7 +61,7 @@ namespace CFProject_T6.Controllers
 
         // POST: BackersProjects/Create
         [Authorize]
-        [HttpPost("project/{project_id:long}/packages/details/{package_id}/purchase", Name = "pur")]
+        [HttpPost("project/{project_id:long}/packages/details/{package_id}/purchase", Name = "purchase")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create (BackersProjects backersProjects, long project_id, long package_id)
         {
@@ -74,8 +74,24 @@ namespace CFProject_T6.Controllers
             {
                 _context.Add(backersProjects);
                 await _context.SaveChangesAsync();
+
+                //Update project's financial progress here...
+
+                //Grab the project & donation amount from DB
+                var target_project = await _context.Projects.FindAsync(project_id);
+                var selected_package = await _context.Packages.FindAsync(package_id);
+                var donation_amount = selected_package.DonationUpperlim;
+
+                //Add the new donation amount to the particular project...
+                target_project.Fundsrecv += donation_amount;
+
+                //Update the selected project...
+                _context.Update(target_project);
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["PackageId"] = new SelectList(_context.Packages, "Id", "Reward", backersProjects.PackageId);
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Descr", backersProjects.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", backersProjects.UserId);

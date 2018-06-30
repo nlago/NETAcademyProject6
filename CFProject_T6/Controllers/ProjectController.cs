@@ -78,17 +78,17 @@ namespace CFProject_T6.Controllers
             //myphoto.Filename = projectVM.Photo;
 
 
-            projectVM.Project.Photos = new List<Photos>
-            {
-                myphoto
-            };
+            //projectVM.Project.Photos = new List<Photos>
+            //{
+            //    myphoto
+            //};
 
 
-            using (var memoryStream = new MemoryStream())
-            {
-                await projectVM.Photo.CopyToAsync(memoryStream);
-                projectVM.Photo = memoryStream.ToArray();
-            }
+            //using (var memoryStream = new MemoryStream())
+            //{
+            //    await projectVM.Photo.CopyToAsync(memoryStream);
+            //    projectVM.Photo = memoryStream.ToArray();
+            //}
 
             //var photo = new Photos();
 

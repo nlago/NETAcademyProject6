@@ -97,23 +97,6 @@ namespace CFProject_T6.Controllers
                 _context.Add(projectVM.Project);
                 await _context.SaveChangesAsync();
 
-                //projectVM.Packages.ProjectId = projectVM.Project.Id;
-                //_context.Add(projectVM.Packages);
-                //await _context.SaveChangesAsync();
-
-                //var fileName = projectVM.Photo.FileName;
-                //var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                //var filePath = Path.Combine(uploads, fileName);
-                //var newImage = new FileStream(filePath, FileMode.Create);
-                //projectVM.Photo.CopyTo(newImage);
-
-                //var savedPhoto = new Photos();
-                //savedPhoto.Filename = fileName;
-
-               // projectVM.Photo.ProjectId = projectVM.Project.Id;
-                //_context.Photos.Add(projectVM.Photo);
-                //await _context.SaveChangesAsync();
-
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projectVM.Project.CategoryId);

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CFProject_T6.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace CFProject_T6.Controllers
 {
@@ -48,10 +49,11 @@ namespace CFProject_T6.Controllers
         }
 
         // GET: Packages/Create
-
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Title");
+            var user_projects = _context.Projects.Where(p => p.CreatorId == GetUserID());
+            ViewData["ProjectId"] = new SelectList(user_projects, "Id", "Title");
             return View();
         }
 
@@ -59,14 +61,19 @@ namespace CFProject_T6.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DonationUpperlim,Reward,ProjectId")] Packages packages)
+        public async Task<IActionResult> Create([Bind("Id,DonationUpperlim,Reward,ProjectId")] Packages packages, long project_id)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(packages);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                //we need this to navigate back to the project we were browsing...
+                project_id = packages.ProjectId;
+
+                return RedirectToAction(nameof(Index), new { project_id });
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Title", packages.ProjectId);
             return View(packages);
@@ -158,6 +165,11 @@ namespace CFProject_T6.Controllers
         private bool PackagesExists(long id)
         {
             return _context.Packages.Any(e => e.Id == id);
+        }
+
+        private long GetUserID()
+        {
+            return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
     }
 }

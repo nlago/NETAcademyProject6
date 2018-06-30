@@ -1,36 +1,64 @@
-﻿@model CFProject_T6.Models.BackersProjects
+﻿@model CFProject_T6.Models.PurchaseConfirmationModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Purchase";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
 
-<h4>BackersProjects</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select disabled asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select disabled asp-for="ProjectId" class ="form-control" asp-items="ViewBag.ProjectId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="PackageId" class="control-label"></label>
-                <select disabled asp-for="PackageId" class ="form-control" asp-items="ViewBag.PackageId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Confirm Purchase" class="btn btn-default" />
-            </div>
-        </form>
+@if (Model.ProjectIsLive)
+{
+    <h2>Purchase Review:</h2>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label">User:</label>
+                    <input type="hidden" asp-for="UserId" class="form-control" value="@Model.UserId">
+                    <input type="text" disabled value="@Model.Username" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Amount" class="control-label">Amount:</label>
+                    <input type="text" disabled value="@Model.Amount" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ProjectId" class="control-label">Project:</label>
+                    <input type="hidden" asp-for="ProjectId" class="form-control" value="@Model.ProjectId">
+
+                    <input type="text" disabled value="@Model.ProjectTitle" />
+                    @*<select disabled asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>*@
+
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PackageId" class="control-label">Reward:</label>
+                    <input type="hidden" asp-for="PackageId" class="form-control" value="@Model.PackageId">
+
+                    <input type="text" disabled value="@Model.Reward" />
+                    @*<select disabled asp-for="PackageId" class="form-control" asp-items="ViewBag.PackageId"></select>*@
+                </div>
+
+                <br />
+                <div class="form-group">
+                    <input type="submit" value="Confirm Purchase" class="btn btn-default" />
+                </div>
+            </form>
+
+        </div>
     </div>
-</div>
+
+} else
+{
+    <p>Project is NOT live, cannot donate!</p>
+
+}
+
 
 <div>
     <a asp-action="Index">Back to List</a>

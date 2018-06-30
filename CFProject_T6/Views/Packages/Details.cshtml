@@ -1,17 +1,16 @@
 ﻿@model CFProject_T6.Models.Packages
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Package Details";
 }
 
-<h2>Details</h2>
+<h2>Package Details</h2>
 
 <div>
-    <h4>Packages</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.DonationUpperlim)
+            Donation Amount
         </dt>
         <dd>
             @Html.DisplayFor(model => model.DonationUpperlim)
@@ -26,7 +25,7 @@
             @Html.DisplayNameFor(model => model.Project)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Project.Descr)
+            @Html.DisplayFor(model => model.Project.Title)
         </dd>
     </dl>
 </div>
@@ -37,9 +36,10 @@
 
     @*<a href="@Url.RouteUrl("purchase", new { controller = "BackersProjects", action = "Create"})">Purchase</a>*@
         
-    @*<a href="@Url.RouteUrl("purchase", new { })"> Purchase </a>*@ |
+    @*<a href="@Url.RouteUrl("purchase", new { })"> Purchase </a>*@
 
-    <a asp-controller="BackersProjects" asp-action="purchase">Purchase!</a> |
+    <a href="@Url.Action("create", "BackersProjects", new { project_id = Model.ProjectId, package_id = Model.Id })">Purchase</a> |
+    @*<a asp-controller="BackersProjects" asp-action="purchase">Purchase!</a> |*@
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

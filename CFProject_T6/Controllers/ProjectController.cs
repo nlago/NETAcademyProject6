@@ -69,17 +69,40 @@ namespace CFProject_T6.Controllers
         {
             projectVM.Project.CreatorId = GetUserID();
             projectVM.Project.Fundsrecv = 0;
+            projectVM.Project.Packages = new List<Packages>
+            {
+                projectVM.Packages
+            };
+
+            var myphoto = new Photos();
+            //myphoto.Filename = projectVM.Photo;
+
+
+            projectVM.Project.Photos = new List<Photos>
+            {
+                myphoto
+            };
+
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await projectVM.Photo.CopyToAsync(memoryStream);
+                projectVM.Photo = memoryStream.ToArray();
+            }
+
+            //var photo = new Photos();
+
+
+
 
             if (ModelState.IsValid)
             {
-
                 _context.Add(projectVM.Project);
                 await _context.SaveChangesAsync();
 
-                projectVM.Packages.ProjectId = projectVM.Project.Id;
-
-                _context.Add(projectVM.Packages);
-                await _context.SaveChangesAsync();
+                //projectVM.Packages.ProjectId = projectVM.Project.Id;
+                //_context.Add(projectVM.Packages);
+                //await _context.SaveChangesAsync();
 
                 //var fileName = projectVM.Photo.FileName;
                 //var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
@@ -90,9 +113,9 @@ namespace CFProject_T6.Controllers
                 //var savedPhoto = new Photos();
                 //savedPhoto.Filename = fileName;
 
-                projectVM.Photo.ProjectId = projectVM.Project.Id;
-                _context.Photos.Add(projectVM.Photo);
-                await _context.SaveChangesAsync();
+               // projectVM.Photo.ProjectId = projectVM.Project.Id;
+                //_context.Photos.Add(projectVM.Photo);
+                //await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }

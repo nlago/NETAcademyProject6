@@ -106,7 +106,7 @@
     {
         <div class="col-md-4 portfolio-item">
             <a href="@Url.Action("SingleItem", "Portfolio")">
-                <img src="@Url.Content($"~/images/{item.Photo?.Filename ?? string.Empty}")" class="img-responsive">
+                <img src="@Url.Content($"~/images/{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
             </a>
             <h3>
                 @Html.ActionLink(item.Project.Title, "SingleItem", "Portfolio")

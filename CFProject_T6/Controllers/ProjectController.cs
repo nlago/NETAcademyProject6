@@ -8,19 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using CFProject_T6.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CFProject_T6.Controllers
 {
     public class ProjectController : Controller
     {
         private readonly ProjectContext _context;
-        private readonly ProjectContext _contextpackage;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-
-        public ProjectController(ProjectContext context)
+        public ProjectController(ProjectContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
-            _contextpackage = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Project
@@ -64,26 +65,40 @@ namespace CFProject_T6.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProjectsCreation projects)
+        public async Task<IActionResult> Create(ProjectsCreation projectVM)
         {
-            projects.Project.CreatorId = GetUserID();
-            projects.Project.Fundsrecv = 0;
+            projectVM.Project.CreatorId = GetUserID();
+            projectVM.Project.Fundsrecv = 0;
 
             if (ModelState.IsValid)
             {
-                _context.Add(projects.Project);
-                await _context.SaveChangesAsync();
-                
-                projects.Packages.ProjectId = projects.Project.Id;
 
-                _contextpackage.Add(projects.Packages);
-                await _contextpackage.SaveChangesAsync();
+                _context.Add(projectVM.Project);
+                await _context.SaveChangesAsync();
+
+                projectVM.Packages.ProjectId = projectVM.Project.Id;
+
+                _context.Add(projectVM.Packages);
+                await _context.SaveChangesAsync();
+
+                //var fileName = projectVM.Photo.FileName;
+                //var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                //var filePath = Path.Combine(uploads, fileName);
+                //var newImage = new FileStream(filePath, FileMode.Create);
+                //projectVM.Photo.CopyTo(newImage);
+
+                //var savedPhoto = new Photos();
+                //savedPhoto.Filename = fileName;
+
+                projectVM.Photo.ProjectId = projectVM.Project.Id;
+                _context.Photos.Add(projectVM.Photo);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.Project.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projectVM.Project.CategoryId);
 
-            return View(projects);
+            return View(projectVM);
 
             //_context.Add(projects);
             //await _context.SaveChangesAsync();
@@ -193,7 +208,18 @@ namespace CFProject_T6.Controllers
 
             var ProjCat = new ProjectCategory();
             ProjCat.Categories = _context.Categories.ToList();
-            ProjCat.Projects = projectContext.ToList();
+            //ProjCat.Projects = projectContext.ToList();
+
+            var allPhotos = _context.Photos;
+            var UIProjectList = projectContext.Select(p => new ProjectSearchResultVM
+            {
+                Project = p,
+                Photo = allPhotos.FirstOrDefault(photo => photo.ProjectId == p.Id) 
+            });
+
+            ProjCat.Projects = UIProjectList.ToList();
+
+            //ProjCat.Photos = _context.Photos.Where(p => projectContext.Contains(p.Project)).ToList();
 
             if (projectContext == null)
                 return NotFound();
@@ -230,9 +256,9 @@ namespace CFProject_T6.Controllers
 
             foreach (var item in myBackedContext)
             {
-                
+
                 myFundedProjects.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
-                                                                        .Where(p => p.Id == item).First());
+                                                                        .Where(p => p.Id == item).SingleOrDefault());
             }
             
             return View(myFundedProjects);

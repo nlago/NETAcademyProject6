@@ -67,36 +67,52 @@
         {
             <tr>
                 <td>
-                    @item.Title
+                    @item.Project.Title
                 </td>
                 <td>
-                    @item.Descr
+                    @item.Project.Descr
                 </td>
                 <td>
-                    @item.Goalfunds
+                    @item.Project.Goalfunds
                 </td>
                 <td>
-                    @item.Fundsrecv
+                    @item.Project.Fundsrecv
                 </td>
                 <td>
-                    @item.StartDate
+                    @item.Project.StartDate
                 </td>
                 <td>
-                    @item.EndDate
+                    @item.Project.EndDate
                 </td>
                 <td>
-                    @item.Category.Name
+                    @item.Project.Category.Name
                 </td>
                 <td>
-                    @item.Creator.Fname
+                    @item.Project.Creator.Fname
                 </td>
                 <td>
                     
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Project.Id">Details</a>
                     
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+
+<div class="row">
+    @foreach (var item in Model.Projects)
+    {
+        <div class="col-md-4 portfolio-item">
+            <a href="@Url.Action("SingleItem", "Portfolio")">
+                <img src="@Url.Content($"~/images/{item.Photo?.Filename ?? string.Empty}")" class="img-responsive">
+            </a>
+            <h3>
+                @Html.ActionLink(item.Project.Title, "SingleItem", "Portfolio")
+            </h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+        </div>
+    }
+   </div>
 

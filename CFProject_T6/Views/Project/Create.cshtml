@@ -1,4 +1,4 @@
-﻿@model CFProject_T6.Models.Projects
+﻿@model CFProject_T6.Models.ProjectsCreation
 
 @{
     ViewData["Title"] = "Create";
@@ -10,39 +10,49 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" id="Create-Project-Form">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="Project.Title" class="control-label"></label>
+                <input asp-for="Project.Title" class="form-control" />
+                <span asp-validation-for="Project.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Descr" class="control-label"></label>
-                <input asp-for="Descr" class="form-control" />
-                <span asp-validation-for="Descr" class="text-danger"></span>
+                <label asp-for="Project.Descr" class="control-label"></label>
+                <input asp-for="Project.Descr" class="form-control" />
+                <span asp-validation-for="Project.Descr" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Goalfunds" class="control-label"></label>
-                <input asp-for="Goalfunds" class="form-control" />
-                <span asp-validation-for="Goalfunds" class="text-danger"></span>
+                <label asp-for="Project.Goalfunds" class="control-label"></label>
+                <input asp-for="Project.Goalfunds" class="form-control" />
+                <span asp-validation-for="Project.Goalfunds" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <label asp-for="Project.CategoryId" class="control-label"></label>
+                <select asp-for="Project.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <label asp-for="Project.StartDate" class="control-label"></label>
+                <input asp-for="Project.StartDate" class="form-control" />
+                <span asp-validation-for="Project.StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <label asp-for="Project.EndDate" class="control-label"></label>
+                <input asp-for="Project.EndDate" class="form-control" />
+                <span asp-validation-for="Project.EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" id="submit-button" class="btn btn-default" />
+                <label class="control-label">Donation Amount</label>
+                <input asp-for="Packages.DonationUpperlim" class="form-control" />
+                <span asp-validation-for="Packages.DonationUpperlim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Packages.Reward" class="control-label"></label>
+                <input asp-for="Packages.Reward" class="form-control" />
+                <span asp-validation-for="Packages.Reward" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
     </div>
@@ -51,8 +61,6 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

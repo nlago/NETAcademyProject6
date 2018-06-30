@@ -74,26 +74,23 @@ namespace CFProject_T6.Controllers
                 projectVM.Packages
             };
 
-            var myphoto = new Photos();
-            //myphoto.Filename = projectVM.Photo;
+            var path = $"/uploads/{projectVM.Photo.FileName}";
+            var pathForHost = _hostingEnvironment.WebRootPath + $"/uploads/{projectVM.Photo.FileName}";
 
+            using (var stream = new FileStream(pathForHost, FileMode.Create))
+            {
+                await projectVM.Photo.CopyToAsync(stream);
+            }
 
-            //projectVM.Project.Photos = new List<Photos>
-            //{
-            //    myphoto
-            //};
+            var myphoto = new Photos()
+            {
+                Filename = path
+            };
 
-
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    await projectVM.Photo.CopyToAsync(memoryStream);
-            //    projectVM.Photo = memoryStream.ToArray();
-            //}
-
-            //var photo = new Photos();
-
-
-
+            projectVM.Project.Photos = new List<Photos>
+            {
+                myphoto
+            };
 
             if (ModelState.IsValid)
             {

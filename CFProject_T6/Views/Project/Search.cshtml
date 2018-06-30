@@ -24,89 +24,12 @@
 
 </form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Title
-                @*@Html.DisplayNameFor(model => model.Title)*@
-            </th>
-            <th>
-                Description
-                @*@Html.DisplayNameFor(model => model.Descr)*@
-            </th>
-            <th>
-                Goal Funds
-                @*@Html.DisplayNameFor(model => model.Goalfunds)*@
-            </th>
-            <th>
-                Funds so far
-                @*@Html.DisplayNameFor(model => model.Fundsrecv)*@
-            </th>
-            <th>
-                Start Date
-                @*@Html.DisplayNameFor(model => model.StartDate)*@
-            </th>
-            <th>
-                End Date
-                @*@Html.DisplayNameFor(model => model.EndDate)*@
-            </th>
-            <th>
-                Categoty
-                @*@Html.DisplayNameFor(model => model.Category)*@
-            </th>
-            <th>
-                Creator
-                @*@Html.DisplayNameFor(model => model.Creator)*@
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Projects)
-        {
-            <tr>
-                <td>
-                    @item.Project.Title
-                </td>
-                <td>
-                    @item.Project.Descr
-                </td>
-                <td>
-                    @item.Project.Goalfunds
-                </td>
-                <td>
-                    @item.Project.Fundsrecv
-                </td>
-                <td>
-                    @item.Project.StartDate
-                </td>
-                <td>
-                    @item.Project.EndDate
-                </td>
-                <td>
-                    @item.Project.Category.Name
-                </td>
-                <td>
-                    @item.Project.Creator.Fname
-                </td>
-                <td>
-                    
-                    <a asp-action="Details" asp-route-id="@item.Project.Id">Details</a>
-                    
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-
 <div class="row">
     @foreach (var item in Model.Projects)
     {
         <div class="col-md-4 portfolio-item">
             <a href="@Url.Action("SingleItem", "Portfolio")">
-                <img src="@Url.Content($"~/images/{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
+                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
             </a>
             <h3>
                 @Html.ActionLink(item.Project.Title, "SingleItem", "Portfolio")

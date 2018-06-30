@@ -14,13 +14,13 @@ namespace CFProject_T6.Controllers
     public class ProjectController : Controller
     {
         private readonly ProjectContext _context;
-        private readonly ProjectContext _contextpackage;
+        //private readonly ProjectContext _contextpackage;
 
 
         public ProjectController(ProjectContext context)
         {
             _context = context;
-            _contextpackage = context;
+            //_contextpackage = context;
         }
 
         // GET: Project
@@ -68,16 +68,20 @@ namespace CFProject_T6.Controllers
         {
             projects.Project.CreatorId = GetUserID();
             projects.Project.Fundsrecv = 0;
+            projects.Project.Packages = new List<Packages>
+            {
+                projects.Packages
+            };
 
             if (ModelState.IsValid)
             {
                 _context.Add(projects.Project);
                 await _context.SaveChangesAsync();
                 
-                projects.Packages.ProjectId = projects.Project.Id;
+                //projects.Packages.ProjectId = projects.Project.Id;
 
-                _contextpackage.Add(projects.Packages);
-                await _contextpackage.SaveChangesAsync();
+                //_contextpackage.Add(projects.Packages);
+                //await _contextpackage.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -237,6 +241,21 @@ namespace CFProject_T6.Controllers
             
             return View(myFundedProjects);
 
+        }
+
+        public IActionResult Test()
+        {
+
+
+            var Users = _context.BackersProjects
+            .Where(b => b.ProjectId == 1)
+            .Select(b => b.User)
+            .ToList();
+            var Project = _context.Projects.Single(p => p.Id == 1);
+            CheckGoal.Getmails(Project, Users);
+            return View();
+
+            
         }
     }
 }

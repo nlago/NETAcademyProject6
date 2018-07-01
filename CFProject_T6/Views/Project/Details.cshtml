@@ -86,11 +86,13 @@
     @if (Model.IsCreator)
     {
         <a asp-action="Edit" asp-route-id="@Model.Project.Id">Edit</a>
-    } | @if (Model.IsCreator)
-    { 
-        <a asp-action="Delete" asp-route-id="@Model.Project.Id"> Delete </a> 
     } |
 
     <a href="@Url.Action("index", "Packages", new { project_id = Model.Project.Id})">Available Packages</a> |
     <a asp-action="MyProjects">Back to List</a>
+
+    @if (Model.IsCreator)
+    {
+        <a asp-action="Delete" asp-route-id="@Model.Project.Id"> Delete </a>
+    } |
 </div>

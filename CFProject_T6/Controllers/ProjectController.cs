@@ -107,8 +107,6 @@ namespace CFProject_T6.Controllers
             if (GetUserID() == pro)
             {
 
-
-
                 if (id == null)
                     return NotFound();
 
@@ -142,6 +140,7 @@ namespace CFProject_T6.Controllers
             {
                 try
                 {
+                    projects.CreatorId = GetUserID();
                     _context.Update(projects);
                     await _context.SaveChangesAsync();
                 }

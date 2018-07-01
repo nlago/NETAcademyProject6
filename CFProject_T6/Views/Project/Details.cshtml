@@ -36,76 +36,79 @@
 
     </div>
     <div class="col-md-6">
-        <h2>Project Description'</h2>
+
+        <h2>Project Description</h2>
         <p>@Html.DisplayFor(model => model.Project.Descr)</p>
+        <div>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.Title)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Title)
+                </dd>
+                <dt>
+                    Description
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Descr)
+                </dd>
+                <dt>
+                    Goal Funds
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Goalfunds)
+                </dd>
+                <dt>
+                    Funds Received
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Fundsrecv)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.StartDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.StartDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.EndDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.EndDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.Category)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Category.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.Creator)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Creator.Email)
+                </dd>
+            </dl>
+        </div>
+
+        <div>
+            @if (Model.IsCreator)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Project.Id">Edit</a>
+            } |
+
+            <a href="@Url.Action("index", "Packages", new { project_id = Model.Project.Id})">Available Packages</a> |
+            <a asp-action="Search">Back to List</a> |
+
+            @if (Model.IsCreator)
+            {
+                <a asp-action="Delete" asp-route-id="@Model.Project.Id"> Delete </a>
+            }
+        </div>
+
     </div>
 </div>
 
-<div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Title)
-        </dd>
-        <dt>
-            Description
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Descr)
-        </dd>
-        <dt>
-            Goal Funds
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Goalfunds)
-        </dd>
-        <dt>
-            Funds Received
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Fundsrecv)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.StartDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.StartDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.EndDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.EndDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Category)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Category.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Creator)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Creator.Email)
-        </dd>
-    </dl>
-</div>
 
-<div>
-    @if (Model.IsCreator)
-    {
-        <a asp-action="Edit" asp-route-id="@Model.Project.Id">Edit</a>
-    } |
-
-    <a href="@Url.Action("index", "Packages", new { project_id = Model.Project.Id})">Available Packages</a> |
-    <a asp-action="Search">Back to List</a> |
-
-    @if (Model.IsCreator)
-    {
-        <a asp-action="Delete" asp-route-id="@Model.Project.Id"> Delete </a>
-    } 
-</div>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CFProject_T6.Models.Projects>
+﻿@model CFProject_T6.Models.ProjectCategory
 
 @{
     ViewData["Title"] = "MyFundedProjects";
@@ -7,71 +7,17 @@
 
 <h2>MyFundedProjects</h2>
 
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descr)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Goalfunds)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fundsrecv)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Creator)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descr)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Goalfunds)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fundsrecv)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Creator.Email)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-
+<div class="row">
+    @foreach (var item in Model.Projects)
+    {
+        <div class="col-md-4 portfolio-item">
+            <a href="@Url.Action("SingleItem", "Portfolio")">
+                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
+            </a>
+            <h3>
+                @Html.ActionLink(item.Project.Title, "SingleItem", "Portfolio")
+            </h3>
+            <p>@item.Project.Descr</p>
+        </div>
+    }
+</div>

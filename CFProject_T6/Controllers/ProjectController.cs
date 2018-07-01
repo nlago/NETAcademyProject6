@@ -288,21 +288,21 @@ namespace CFProject_T6.Controllers
         public IActionResult MyFundedProjects()
         {
             var myBackedContext = _context.BackersProjects.Where(p => p.UserId == GetUserID()).Select(p => p.ProjectId).Distinct().ToList();
-            var myFundedProjectsContect = new List<Projects>();
+            var myFundedProjectsContext = new List<Projects>();
 
             foreach (var item in myBackedContext)
             {
-                myFundedProjectsContect.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
+                myFundedProjectsContext.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
                                                                         .Where(p => p.Id == item).SingleOrDefault());
             }
 
-            if (myFundedProjectsContect.Count == 0)
+            if (myFundedProjectsContext.Count == 0)
                 return NotFound();
             else
             {
                 var myFundedProjects = new ProjectCategory();
                 var allPhotos = _context.Photos;
-                var UIProjectList = myFundedProjectsContect.Select(p => new ProjectSearchResultVM
+                var UIProjectList = myFundedProjectsContext.Select(p => new ProjectSearchResultVM
                 {
                     Project = p,
                     Photo = allPhotos.FirstOrDefault(photo => photo.ProjectId == p.Id)

@@ -8,6 +8,6 @@ namespace CFProject_T6.Models
     public class ProjectCategory
     {
         public List<Categories> Categories { get; set; }
-        public List<Projects> Projects { get; set; }
+        public List<ProjectSearchResultVM> Projects { get; set; }
     }
 }

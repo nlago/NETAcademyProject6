@@ -23,7 +23,6 @@ namespace CFProject_T6.Models
         public virtual DbSet<Photos> Photos { get; set; }
         public virtual DbSet<Projects> Projects { get; set; }
         public virtual DbSet<Updates> Updates { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Videos> Videos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

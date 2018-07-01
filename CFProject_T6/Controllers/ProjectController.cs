@@ -8,19 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using CFProject_T6.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace CFProject_T6.Controllers
 {
     public class ProjectController : Controller
     {
         private readonly ProjectContext _context;
-        private readonly ProjectContext _contextpackage;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-
-        public ProjectController(ProjectContext context)
+        public ProjectController(ProjectContext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
-            _contextpackage = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Project
@@ -64,31 +65,43 @@ namespace CFProject_T6.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProjectsCreation projects)
+        public async Task<IActionResult> Create(ProjectsCreation projectVM)
         {
-            if (projects.Project.StartDate < projects.Project.EndDate)
+            projectVM.Project.CreatorId = GetUserID();
+            projectVM.Project.Fundsrecv = 0;
+            projectVM.Project.Packages = new List<Packages>
             {
+                projectVM.Packages
+            };
 
-                projects.Project.CreatorId = GetUserID();
-                projects.Project.Fundsrecv = 0;
+            var path = $"/uploads/{projectVM.Photo.FileName}";
+            var pathForHost = _hostingEnvironment.WebRootPath + $"/uploads/{projectVM.Photo.FileName}";
 
-                if (ModelState.IsValid)
-                {
-                    _context.Add(projects.Project);
-                    await _context.SaveChangesAsync();
-
-                    projects.Packages.ProjectId = projects.Project.Id;
-
-                    _contextpackage.Add(projects.Packages);
-                    await _contextpackage.SaveChangesAsync();
-
-                    return RedirectToAction(nameof(Index));
-                }
+            using (var stream = new FileStream(pathForHost, FileMode.Create))
+            {
+                await projectVM.Photo.CopyToAsync(stream);
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.Project.CategoryId);
-            ViewData["Wrong Date"] = "StartDate must be earlier than EndDate";
 
-            return View(projects);
+            var myphoto = new Photos()
+            {
+                Filename = path
+            };
+
+            projectVM.Project.Photos = new List<Photos>
+            {
+                myphoto
+            };
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(projectVM.Project);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projectVM.Project.CategoryId);
+
+            return View(projectVM);
 
             //_context.Add(projects);
             //await _context.SaveChangesAsync();
@@ -210,7 +223,18 @@ namespace CFProject_T6.Controllers
 
             var ProjCat = new ProjectCategory();
             ProjCat.Categories = _context.Categories.ToList();
-            ProjCat.Projects = projectContext.ToList();
+            //ProjCat.Projects = projectContext.ToList();
+
+            var allPhotos = _context.Photos;
+            var UIProjectList = projectContext.Select(p => new ProjectSearchResultVM
+            {
+                Project = p,
+                Photo = allPhotos.FirstOrDefault(photo => photo.ProjectId == p.Id) 
+            });
+
+            ProjCat.Projects = UIProjectList.ToList();
+
+            //ProjCat.Photos = _context.Photos.Where(p => projectContext.Contains(p.Project)).ToList();
 
             if (projectContext == null)
                 return NotFound();
@@ -224,9 +248,8 @@ namespace CFProject_T6.Controllers
         }
 
         [Authorize]
-        public IActionResult MyProject()
+        public IActionResult MyProjects()
         {
-
             var projectContext = _context.Projects
                                             .Include(p => p.Category)
                                             .Include(p => p.Creator)
@@ -239,7 +262,6 @@ namespace CFProject_T6.Controllers
         [Authorize]
         public IActionResult MyFundedProjects()
         {
-
             var myBackedContext = _context.BackersProjects.Where(p => p.UserId == GetUserID()).Select(p => p.ProjectId).Distinct().ToList();
             var myFundedProjects = new List<Projects>();
             //IQueryable<Projects> myFundedProjects;
@@ -247,9 +269,8 @@ namespace CFProject_T6.Controllers
 
             foreach (var item in myBackedContext)
             {
-                
                 myFundedProjects.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
-                                                                        .Where(p => p.Id == item).First());
+                                                                        .Where(p => p.Id == item).SingleOrDefault());
             }
             
             return View(myFundedProjects);

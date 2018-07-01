@@ -71,7 +71,14 @@ namespace CFProject_T6.Controllers
 
         private long GetUserID()
         {
-            return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            try
+            {
+                return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+            catch (ArgumentNullException e)
+            {
+                return 0;
+            }
         }
     }
 }

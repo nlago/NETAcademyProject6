@@ -140,7 +140,8 @@ namespace CFProject_T6.Controllers
                 {
                     UserList.Add(_context.Users.Single(u => u.Id == user));
                 }
-                CheckGoal.Getmails(Project, UserList);
+                var User = _context.Users.Single(u => u.Id == Project.CreatorId);
+                CheckGoal.Getmails(Project, UserList ,User);
                 
 
                 return RedirectToAction("Index", "Packages");
@@ -150,7 +151,7 @@ namespace CFProject_T6.Controllers
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Descr", backersProjects.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email", backersProjects.UserId);
             return View(backersProjects);
-        }        
+        }
 
         //private bool BackersProjectsExists(long id)
         //{
@@ -159,7 +160,14 @@ namespace CFProject_T6.Controllers
 
         private long GetUserID()
         {
-            return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            try
+            {
+                return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+            catch (ArgumentNullException e)
+            {
+                return 0;
+            }
         }
     }
 }

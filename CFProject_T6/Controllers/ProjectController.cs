@@ -44,7 +44,7 @@ namespace CFProject_T6.Controllers
                 .Include(p => p.Category)
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(m => m.Id == id);
-
+            
             var iscreator = _context.Projects.Any(p => p.Id == id && p.CreatorId == GetUserID());
 
             proDetail.IsCreator = iscreator;
@@ -263,7 +263,14 @@ namespace CFProject_T6.Controllers
         }
         private long GetUserID()
         {
-            return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            try
+            {
+                return long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+            catch(ArgumentNullException e)
+            {
+                return 0;
+            }
         }
 
         [Authorize]

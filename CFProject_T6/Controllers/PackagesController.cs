@@ -25,7 +25,12 @@ namespace CFProject_T6.Controllers
         public async Task<IActionResult> Index(long project_id)
         {
             var projectContext = _context.Packages.Include(p => p.Project);
-            return View(await projectContext.Where(t => t.ProjectId == project_id).ToListAsync());
+            var packages = await projectContext.Where(t => t.ProjectId == project_id).ToListAsync();
+            var iscreator = _context.Projects.Any(p => p.Id == project_id && p.CreatorId == GetUserID());
+
+            PackagesVM packages_model = new PackagesVM { Packages = packages, IsCreator = iscreator };
+
+            return View(packages_model);
         }
 
         // GET: Packages/Details/5

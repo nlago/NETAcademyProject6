@@ -255,7 +255,20 @@ namespace CFProject_T6.Controllers
                                             .Include(p => p.Creator)
                                             .Where(p => p.CreatorId == GetUserID());
 
-            return View(projectContext.ToList());
+            var myProjects = new ProjectCategory();
+            //ProjCat.Categories = _context.Categories.ToList();
+            //ProjCat.Projects = projectContext.ToList();
+
+            var allPhotos = _context.Photos;
+            var UIProjectList = projectContext.Select(p => new ProjectSearchResultVM
+            {
+                Project = p,
+                Photo = allPhotos.FirstOrDefault(photo => photo.ProjectId == p.Id)
+            });
+
+            myProjects.Projects = UIProjectList.ToList();
+
+            return View(myProjects);
 
         }
 
@@ -263,17 +276,30 @@ namespace CFProject_T6.Controllers
         public IActionResult MyFundedProjects()
         {
             var myBackedContext = _context.BackersProjects.Where(p => p.UserId == GetUserID()).Select(p => p.ProjectId).Distinct().ToList();
-            var myFundedProjects = new List<Projects>();
-            //IQueryable<Projects> myFundedProjects;
-            //var newMyFundedProjects = new List<Projects>();
+            var myFundedProjectsContect = new List<Projects>();
 
             foreach (var item in myBackedContext)
             {
-                myFundedProjects.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
+                myFundedProjectsContect.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
                                                                         .Where(p => p.Id == item).SingleOrDefault());
             }
-            
-            return View(myFundedProjects);
+
+            if (myFundedProjectsContect.Count == 0)
+                return NotFound();
+            else
+            {
+                var myFundedProjects = new ProjectCategory();
+                var allPhotos = _context.Photos;
+                var UIProjectList = myFundedProjectsContect.Select(p => new ProjectSearchResultVM
+                {
+                    Project = p,
+                    Photo = allPhotos.FirstOrDefault(photo => photo.ProjectId == p.Id)
+                });
+
+                myFundedProjects.Projects = UIProjectList.ToList();
+
+                return View(myFundedProjects);
+            }
 
         }
     }

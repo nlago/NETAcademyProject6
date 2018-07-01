@@ -1,8 +1,8 @@
-﻿@model CFProject_T6.Models.Projects
+﻿@model CFProject_T6.Models.ProjectSearchResultVM
 
 @{
     ViewData["Title"] = "Project Details";
-    var prog = Math.Round(Model.Fundsrecv / Model.Goalfunds, 2) * 100;
+    var prog = Math.Round(Model.Project.Fundsrecv / Model.Project.Goalfunds, 2) * 100;
     var width = Math.Min(prog, 100);
     var prog_point = "";
 
@@ -28,64 +28,69 @@
     <div class="progress-bar progress-bar-striped active @prog_point" role="progressbar" style="width: @width%;" aria-valuenow="@width" aria-valuemin="0" aria-valuemax="100">@prog%</div>
 </div>
 
-@*<p>@prog</p>*@
-
 <div>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Project.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Project.Title)
         </dd>
         <dt>
             Description
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Descr)
+            @Html.DisplayFor(model => model.Project.Descr)
         </dd>
         <dt>
             Goal Funds
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Goalfunds)
+            @Html.DisplayFor(model => model.Project.Goalfunds)
         </dd>
         <dt>
             Funds Received
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Fundsrecv)
+            @Html.DisplayFor(model => model.Project.Fundsrecv)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayNameFor(model => model.Project.StartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.StartDate)
+            @Html.DisplayFor(model => model.Project.StartDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.DisplayNameFor(model => model.Project.EndDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.EndDate)
+            @Html.DisplayFor(model => model.Project.EndDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.DisplayNameFor(model => model.Project.Category)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Category.Name)
+            @Html.DisplayFor(model => model.Project.Category.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Creator)
+            @Html.DisplayNameFor(model => model.Project.Creator)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Creator.Email)
+            @Html.DisplayFor(model => model.Project.Creator.Email)
         </dd>
     </dl>
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a href="@Url.Action("index", "Packages", new { project_id = Model.Id})">Available Packages</a> |
-    <a asp-action="Index">Back to List</a>
+    @if (Model.IsCreator)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Project.Id">Edit</a>
+    } | @if (Model.IsCreator)
+    { 
+        <a asp-action="Delete" asp-route-id="@Model.Project.Id"> Delete </a> 
+    } |
+
+    <a href="@Url.Action("index", "Packages", new { project_id = Model.Project.Id})">Available Packages</a> |
+    <a asp-action="MyProjects">Back to List</a>
 </div>

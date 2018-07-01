@@ -76,17 +76,3 @@
     </tbody>
 </table>
 
-<div class="row">
-    @foreach (var item in Model)
-    {
-        <div class="col-md-4 portfolio-item">
-            <a href="@Url.Action("SingleItem", "Portfolio")">
-                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
-            </a>
-            <h3>
-                @Html.ActionLink(item.Project.Title, "SingleItem", "Portfolio")
-            </h3>
-            <p>@item.Project.Descr</p>
-        </div>
-    }
-</div>

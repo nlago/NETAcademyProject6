@@ -33,7 +33,8 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to Packages</a>
+    <a href="@Url.Action("myprojects", "Project")">Back to Projects</a>
+    @*<a asp-controller="Packages" asp-action="Index">Back to Packages</a>*@
 </div>
 
 @section Scripts {

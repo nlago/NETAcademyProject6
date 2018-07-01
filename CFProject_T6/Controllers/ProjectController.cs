@@ -39,15 +39,22 @@ namespace CFProject_T6.Controllers
             if (id == null)
                 return NotFound();
 
-            var projects = await _context.Projects
+            var project = await _context.Projects
                 .Include(p => p.Category)
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (projects == null)
+            if (project == null)
                 return NotFound();
-            
-            return View(projects);
+
+            var projectphoto = _context.Photos.Where(p => p.ProjectId == id).Select( p => p.Filename).First();
+
+            var UIProjectDetails = new ProjectSearchResultVM();
+
+            UIProjectDetails.Project = project;
+            UIProjectDetails.Photo.Filename = projectphoto;
+
+            return View(UIProjectDetails);
         }
 
         // GET: Project/Create
@@ -121,11 +128,10 @@ namespace CFProject_T6.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
-            var pro = _context.Projects.Where(p => p.Id == id).Select(p => p.CreatorId).First();
+            var projectCreator = _context.Projects.Where(p => p.Id == id).Select(p => p.CreatorId).First();
 
-            if (GetUserID() == pro)
+            if (GetUserID() == projectCreator)
             {
-
                 if (id == null)
                     return NotFound();
 
@@ -151,14 +157,13 @@ namespace CFProject_T6.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Title,Descr,Goalfunds,CreatorId,Fundsrecv,CategoryId,StartDate,EndDate")] Projects projects)
+        public async Task<IActionResult> Edit(long id, Projects projects)
         {
             if (id != projects.Id)
                 return NotFound();
 
-            if (projects.StartDate <= projects.EndDate)
+            if ((projects.StartDate <= projects.EndDate) && (projects.EndDate > DateTime.UtcNow.Date))
             {
-
                 if (ModelState.IsValid)
                 {
                     try
@@ -176,13 +181,10 @@ namespace CFProject_T6.Controllers
                     }
                     return RedirectToAction(nameof(Index));
                 }
-
-                projects.CreatorId = GetUserID();
-
-                
+               //projects.CreatorId = GetUserID();  
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
-            ViewData["Wrong Date"] = "Start Date must be earlier than End Date";
+            ViewData["Wrong Date"] = "Check your Start Date and your End Date";
             return View(projects);
         }
 

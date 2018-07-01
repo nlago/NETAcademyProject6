@@ -67,39 +67,45 @@ namespace CFProject_T6.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProjectsCreation projectVM)
         {
-            projectVM.Project.CreatorId = GetUserID();
-            projectVM.Project.Fundsrecv = 0;
-            projectVM.Project.Packages = new List<Packages>
+            if (projectVM.Project.StartDate <= projectVM.Project.EndDate)
             {
-                projectVM.Packages
-            };
 
-            var path = $"/uploads/{projectVM.Photo.FileName}";
-            var pathForHost = _hostingEnvironment.WebRootPath + $"/uploads/{projectVM.Photo.FileName}";
+                projectVM.Project.CreatorId = GetUserID();
+                projectVM.Project.Fundsrecv = 0;
+                projectVM.Project.Packages = new List<Packages>
+                {
+                    projectVM.Packages
+                };
 
-            using (var stream = new FileStream(pathForHost, FileMode.Create))
-            {
-                await projectVM.Photo.CopyToAsync(stream);
-            }
+                var path = $"/uploads/{projectVM.Photo.FileName}";
+                var pathForHost = _hostingEnvironment.WebRootPath + $"/uploads/{projectVM.Photo.FileName}";
 
-            var myphoto = new Photos()
-            {
-                Filename = path
-            };
+                using (var stream = new FileStream(pathForHost, FileMode.Create))
+                {
+                    await projectVM.Photo.CopyToAsync(stream);
+                }
 
-            projectVM.Project.Photos = new List<Photos>
-            {
-                myphoto
-            };
+                var myphoto = new Photos()
+                {
+                    Filename = path
+                };
 
-            if (ModelState.IsValid)
-            {
-                _context.Add(projectVM.Project);
-                await _context.SaveChangesAsync();
+                projectVM.Project.Photos = new List<Photos>
+                {
+                    myphoto
+                };
 
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(projectVM.Project);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projectVM.Project.CategoryId);
+            ViewData["Wrong Date"] = "Start Date must be earlier than End Date";
 
             return View(projectVM);
 
@@ -130,6 +136,7 @@ namespace CFProject_T6.Controllers
                 projects.CreatorId = GetUserID();
 
                 ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
+                
                 return View(projects);
             }
             else
@@ -149,27 +156,33 @@ namespace CFProject_T6.Controllers
             if (id != projects.Id)
                 return NotFound();
 
-            if (ModelState.IsValid)
+            if (projects.StartDate <= projects.EndDate)
             {
-                try
+
+                if (ModelState.IsValid)
                 {
-                    projects.CreatorId = GetUserID();
-                    _context.Update(projects);
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        projects.CreatorId = GetUserID();
+                        _context.Update(projects);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!ProjectsExists(projects.Id))
+                            return NotFound();
+                        else
+                            throw;
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProjectsExists(projects.Id))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
+
+                projects.CreatorId = GetUserID();
+
+                
             }
-
-            projects.CreatorId = GetUserID();
-
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
+            ViewData["Wrong Date"] = "Start Date must be earlier than End Date";
             return View(projects);
         }
 

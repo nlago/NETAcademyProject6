@@ -157,6 +157,19 @@ namespace CFProject_T6.Controllers
                 _context.Update(target_project);
                 await _context.SaveChangesAsync();
 
+                var Project = _context.Projects.Single(p => p.Id == project_id);
+                var Users = _context.BackersProjects
+                .Where(b => b.ProjectId == Project.Id)
+                .Select(b => b.UserId)
+                .ToList();
+                var UserList = new List<Users>();
+                foreach(var user in Users)
+                {
+                    UserList.Add(_context.Users.Single(u => u.Id == user));
+                }
+                CheckGoal.Getmails(Project, UserList);
+                
+
                 return RedirectToAction(nameof(Index));
             }
 

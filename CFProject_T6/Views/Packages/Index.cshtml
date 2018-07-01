@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CFProject_T6.Models.Packages>
+﻿@model CFProject_T6.Models.PackagesVM
 
 @{
     ViewData["Title"] = "Packages";
@@ -6,9 +6,14 @@
 
 <h2>Packages</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (Model.IsCreator)
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+
+}
+
 <table class="table">
     <thead>
         <tr>
@@ -16,30 +21,31 @@
                 Donation Amount
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Reward)
+                Reward
             </th>
 
-            <th></th>
+            <th>
+                Corresponding Project
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DonationUpperlim)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reward)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Descr)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Packages)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DonationUpperlim)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reward)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Project.Title)
+                </td>
+                <td>
+                    | <a href="@Url.Action("create", "BackersProjects", new { project_id = item.ProjectId, package_id = item.Id })">Purchase</a> |                    
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

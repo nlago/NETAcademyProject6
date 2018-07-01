@@ -66,22 +66,27 @@ namespace CFProject_T6.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProjectsCreation projects)
         {
-            projects.Project.CreatorId = GetUserID();
-            projects.Project.Fundsrecv = 0;
-
-            if (ModelState.IsValid)
+            if (projects.Project.StartDate < projects.Project.EndDate)
             {
-                _context.Add(projects.Project);
-                await _context.SaveChangesAsync();
-                
-                projects.Packages.ProjectId = projects.Project.Id;
 
-                _contextpackage.Add(projects.Packages);
-                await _contextpackage.SaveChangesAsync();
+                projects.Project.CreatorId = GetUserID();
+                projects.Project.Fundsrecv = 0;
 
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(projects.Project);
+                    await _context.SaveChangesAsync();
+
+                    projects.Packages.ProjectId = projects.Project.Id;
+
+                    _contextpackage.Add(projects.Packages);
+                    await _contextpackage.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.Project.CategoryId);
+            ViewData["Wrong Date"] = "StartDate must be earlier than EndDate";
 
             return View(projects);
 

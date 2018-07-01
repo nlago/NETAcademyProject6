@@ -43,6 +43,7 @@
                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
+            <span class="error" style="color:red;">@ViewData["Wrong Date"]</span>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
                 <input asp-for="StartDate" class="form-control" />

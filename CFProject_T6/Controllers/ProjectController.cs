@@ -246,12 +246,11 @@ namespace CFProject_T6.Controllers
         public IActionResult Test()
         {
 
-
+            var Project = _context.Projects.Single(p => p.Id == 1);
             var Users = _context.BackersProjects
-            .Where(b => b.ProjectId == 1)
+            .Where(b => b.ProjectId == Project.Id)
             .Select(b => b.User)
             .ToList();
-            var Project = _context.Projects.Single(p => p.Id == 1);
             CheckGoal.Getmails(Project, Users);
             return View();
 

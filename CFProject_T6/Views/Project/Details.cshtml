@@ -2,9 +2,33 @@
 
 @{
     ViewData["Title"] = "Project Details";
+    var prog = Math.Round(Model.Fundsrecv / Model.Goalfunds, 2) * 100;
+    var width = Math.Min(prog, 100);
+    var prog_point = "";
+
+    switch (prog)
+    {
+        case decimal n when (n <= 33.33M): prog_point = "progress-bar-danger";
+            break;
+
+        case decimal n when (n > 33.33M && n < 66.66M):
+            prog_point = "progress-bar-warning";
+            break;
+
+        case decimal n when (n >= 66.66M):
+            prog_point = "progress-bar-success";
+            break;
+
+    }
 }
 
 <h2>Project Details</h2>
+
+<div class="progress">
+    <div class="progress-bar progress-bar-striped active @prog_point" role="progressbar" style="width: @width%;" aria-valuenow="@width" aria-valuemin="0" aria-valuemax="100">@prog%</div>
+</div>
+
+@*<p>@prog</p>*@
 
 <div>
     <hr />
@@ -59,6 +83,7 @@
         </dd>
     </dl>
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a href="@Url.Action("index", "Packages", new { project_id = Model.Id})">Available Packages</a> |

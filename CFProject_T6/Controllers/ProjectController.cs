@@ -236,9 +236,8 @@ namespace CFProject_T6.Controllers
         }
 
         [Authorize]
-        public IActionResult MyProject()
+        public IActionResult MyProjects()
         {
-
             var projectContext = _context.Projects
                                             .Include(p => p.Category)
                                             .Include(p => p.Creator)
@@ -251,7 +250,6 @@ namespace CFProject_T6.Controllers
         [Authorize]
         public IActionResult MyFundedProjects()
         {
-
             var myBackedContext = _context.BackersProjects.Where(p => p.UserId == GetUserID()).Select(p => p.ProjectId).Distinct().ToList();
             var myFundedProjects = new List<Projects>();
             //IQueryable<Projects> myFundedProjects;
@@ -259,7 +257,6 @@ namespace CFProject_T6.Controllers
 
             foreach (var item in myBackedContext)
             {
-
                 myFundedProjects.Add(_context.Projects.Include(p => p.Category).Include(p => p.Creator)
                                                                         .Where(p => p.Id == item).SingleOrDefault());
             }

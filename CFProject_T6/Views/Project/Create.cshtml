@@ -31,6 +31,7 @@
                 <label asp-for="Project.CategoryId" class="control-label"></label>
                 <select asp-for="Project.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
+            <span class="error" style="color:red;">@ViewData["Wrong Date"]</span>
             <div class="form-group">
                 <label asp-for="Project.StartDate" class="control-label"></label>
                 <input asp-for="Project.StartDate" class="form-control" />

@@ -86,6 +86,7 @@ namespace CFProject_T6.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.Project.CategoryId);
+            ViewData["Wrong Date"] = "StartDate must be earlier than EndDate";
 
             return View(projects);
 
@@ -101,17 +102,29 @@ namespace CFProject_T6.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(long? id)
         {
-            if (id == null)
-                return NotFound();
+            var pro = _context.Projects.Where(p => p.Id == id).Select(p => p.CreatorId).First();
 
-            var projects = await _context.Projects.FindAsync(id);
-            if (projects == null)
-                return NotFound();
+            if (GetUserID() == pro)
+            {
 
-            projects.CreatorId = GetUserID();
 
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
-            return View(projects);
+
+                if (id == null)
+                    return NotFound();
+
+                var projects = await _context.Projects.FindAsync(id);
+                if (projects == null)
+                    return NotFound();
+
+                projects.CreatorId = GetUserID();
+
+                ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
+                return View(projects);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Search));
+            }
         }
 
         // POST: Project/Edit/5

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using CFProject_T6.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace CFProject_T6.Controllers
 {
@@ -51,12 +53,66 @@ namespace CFProject_T6.Controllers
         [Authorize]
         // GET: BackersProjects/Create
         [HttpGet("project/{project_id:long}/packages/details/{package_id}/purchase", Name = "purchase")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create(long package_id, long project_id)
         {
-            ViewData["PackageId"] = new SelectList(_context.Packages, "Id", "Reward");
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Descr");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email");
-            return View();
+            //initialize required vars
+            long userid = GetUserID();
+            var live = false;
+
+            var selected_project_startdate = await _context.Projects
+                                .Where(p => p.Id == project_id)
+                                .Select(p => p.StartDate)
+                                .SingleOrDefaultAsync();
+
+            //if project is live, start building a purchase confirmation model with all purchase details...
+            if (selected_project_startdate < DateTime.Now)
+            {
+                live = true;
+
+                //fetch additional data from DB...
+                var username = await _context.Users
+                    .Where(u => u.Id == userid)
+                    .Select(u => u.UserName)
+                    .SingleOrDefaultAsync();
+                var projecttitle = await _context.Projects
+                    .Where(p => p.Id == project_id)
+                    .Select(p => p.Title)
+                    .SingleOrDefaultAsync();
+                var reward = await _context.Packages
+                    .Where(p => p.Id == package_id)
+                    .Select(p => p.Reward)
+                    .SingleOrDefaultAsync();
+                var amount = await _context.Packages
+                    .Where(p => p.Id == package_id)
+                    .Select(p => p.DonationUpperlim)
+                    .SingleOrDefaultAsync();
+
+                PurchaseConfirmationModel successful_purchase = new PurchaseConfirmationModel
+                {
+                    UserId = userid,
+                    PackageId = package_id,
+                    ProjectId = project_id,
+                    Username = username,
+                    ProjectTitle = projecttitle,
+                    Reward = reward,
+                    Amount = amount,
+                    ProjectIsLive = live
+                };
+                return View(successful_purchase);
+            }
+            
+            //else build an invalid purchase model...
+            PurchaseConfirmationModel invalid_purchase = new PurchaseConfirmationModel
+            {                
+                ProjectIsLive = live
+            };
+
+            return View(invalid_purchase);
+
+            //ViewData["PackageId"] = new SelectList(_context.Packages, "Id", "Reward");
+            //ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Descr");
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Email");
+
         }
 
         // POST: BackersProjects/Create
@@ -65,6 +121,18 @@ namespace CFProject_T6.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create (BackersProjects backersProjects, long project_id, long package_id)
         {
+
+            //Protect from POSTing a donation for a project which is not LIVE...
+            var selected_project_startdate = await _context.Projects
+                    .Where(p => p.Id == project_id)
+                    .Select(p => p.StartDate)
+                    .SingleOrDefaultAsync();
+
+            if (selected_project_startdate > DateTime.Now)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            //<---------- protection code ends here ---------->
 
             backersProjects.UserId = GetUserID();
             backersProjects.ProjectId = project_id;

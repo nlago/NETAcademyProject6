@@ -45,7 +45,7 @@ namespace CFProject_T6.Controllers
 
             if (projects == null)
                 return NotFound();
-
+            
             return View(projects);
         }
 

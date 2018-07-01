@@ -14,7 +14,7 @@ namespace CFProject_T6.Models
             Updates = new HashSet<Updates>();
             Videos = new HashSet<Videos>();
         }
-
+        
         public long Id { get; set; }
         public string Title { get; set; }
         public string Descr { get; set; }

@@ -38,16 +38,23 @@ namespace CFProject_T6.Controllers
         {
             if (id == null)
                 return NotFound();
+            var proDetail = new ProjectSearchResultVM();
 
             var projects = await _context.Projects
                 .Include(p => p.Category)
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
+            var iscreator = _context.Projects.Any(p => p.Id == id && p.CreatorId == GetUserID());
+
+            proDetail.IsCreator = iscreator;
+            proDetail.Project = projects;
+
+
             if (projects == null)
                 return NotFound();
             
-            return View(projects);
+            return View(proDetail);
         }
 
         // GET: Project/Create

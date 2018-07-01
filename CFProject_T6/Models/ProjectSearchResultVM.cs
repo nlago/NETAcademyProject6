@@ -9,5 +9,6 @@ namespace CFProject_T6.Models
     {
         public Projects Project { get; set; }
         public Photos Photo { get; set; }
+        public bool IsCreator { get; set; }
     }
 }

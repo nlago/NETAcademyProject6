@@ -10,7 +10,7 @@ namespace CFProject_T6.Models
     public static class CheckGoal
     {
 
-        public static void Getmails(Projects Project, List<Users> Users)
+        public static void Getmails(Projects Project, List<Users> Users, Users User)
         {
             
             if (Project.Goalfunds <= Project.Fundsrecv)
@@ -40,7 +40,17 @@ namespace CFProject_T6.Models
 
                     client.Send(message);
                 }
-                
+
+                var mail = new MailAddress(User.Email);
+                var too = mail;
+                var fromo = new MailAddress("Team6@Project.gr");
+                var messageo = new MailMessage(fromo, too);
+                messageo.Subject = "Goal Reached";
+                messageo.Body = "Your Project " + Project.Title + " has reached the Goal Funds !!";
+                messageo.IsBodyHtml = false;
+
+                client.Send(messageo);
+
             }
             
         }

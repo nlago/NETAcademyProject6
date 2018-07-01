@@ -39,7 +39,6 @@ namespace CFProject_T6.Controllers
             if (id == null)
                 return NotFound();
 
-
             var project = await _context.Projects
                 .Include(p => p.Category)
                 .Include(p => p.Creator)
@@ -48,19 +47,18 @@ namespace CFProject_T6.Controllers
             if (project == null)
                 return NotFound();
 
-
             var iscreator = _context.Projects.Any(p => p.Id == id && p.CreatorId == GetUserID());
-            var projectphoto = _context.Photos.Where(p => p.ProjectId == id).Select(p => p.Filename).First();
+            var photoUrl = _context.Photos.Where(p => p.ProjectId == id).Select(p => p.Filename).First();
 
             var UIProjectDetails = new ProjectSearchResultVM();
+
+           UIProjectDetails.Photo = new Photos();
+
+
             UIProjectDetails.IsCreator = iscreator;
-
-
-
-  
-
             UIProjectDetails.Project = project;
-            UIProjectDetails.Photo.Filename = projectphoto;
+
+            UIProjectDetails.Photo.Filename = Path.Combine(_hostingEnvironment.WebRootPath, photoUrl);
 
             return View(UIProjectDetails);
         }

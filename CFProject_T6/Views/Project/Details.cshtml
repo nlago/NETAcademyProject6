@@ -32,7 +32,7 @@
 
 <div class="row">
     <div class="col-md-6"> 
-        <img src="@Url.Content($"{Model.Photo.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
+        <img src="@Url.Content($"{Model.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
 
     </div>
     <div class="col-md-6">
@@ -98,17 +98,14 @@
 <div>
     @if (Model.IsCreator)
     {
-    <a asp-action="Edit" asp-route-id="@Model.Project.Id">Edit</a>
+        <a asp-action="Edit" asp-route-id="@Model.Project.Id">Edit</a>
     } |
 
-    <a href="@Url.Action(" index", "Packages" , new { project_id=Model.Project.Id})">Available Packages</a> |
+    <a href="@Url.Action("index", "Packages", new { project_id = Model.Project.Id})">Available Packages</a> |
     <a asp-action="Search">Back to List</a> |
 
     @if (Model.IsCreator)
     {
-    <a asp-action="Delete" asp-route-id="@Model.Project.Id"> Delete </a>
-    }
-    <a asp-action="Edit" asp-route-id="@Model.Project.Id">Edit</a> |
-    <a href="@Url.Action(" index", "Packages" , new { project_id=Model.Project.Id})">Available Packages</a> |
-    <a asp-action="Index">Back to List</a>
+        <a asp-action="Delete" asp-route-id="@Model.Project.Id"> Delete </a>
+    } 
 </div>

@@ -28,11 +28,11 @@
     @foreach (var item in Model.Projects)
     {
         <div class="col-md-4 portfolio-item">
-            <a href="@Url.Action("SingleItem", "Portfolio")">
+            <a href="@Url.Action("Details", "Project", new { id = item.Project.Id})">
                 <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
             </a>
             <h3>
-                @Html.ActionLink(item.Project.Title, "SingleItem", "Portfolio")
+                @Html.ActionLink(item.Project.Title, "Details", "Project", new { id = item.Project.Id })
             </h3>
             <p>@item.Project.Descr</p>
         </div>

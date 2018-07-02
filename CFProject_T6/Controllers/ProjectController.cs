@@ -80,7 +80,7 @@ namespace CFProject_T6.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProjectsCreation projectVM)
         {
-            if (projectVM.Project.StartDate <= projectVM.Project.EndDate)
+            if ((projectVM.Project.StartDate <= projectVM.Project.EndDate) && (projectVM.Project.EndDate > DateTime.UtcNow.Date))
             {
 
                 projectVM.Project.CreatorId = GetUserID();
@@ -118,7 +118,7 @@ namespace CFProject_T6.Controllers
                 
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projectVM.Project.CategoryId);
-            ViewData["Wrong Date"] = "Start Date must be earlier than End Date";
+            ViewData["Wrong Date"] = "Check your Start Date and your End Date";
 
             return View(projectVM);
 
@@ -206,10 +206,21 @@ namespace CFProject_T6.Controllers
                 .Include(p => p.Creator)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
+            var packages = _context.Packages.Where(p => p.ProjectId == id).ToList();
+            var photo = _context.Photos.Where(p => p.ProjectId == id).ToList();
+            var backetproject = _context.BackersProjects.Where(b => b.ProjectId == id).ToList();
+
+            var delete = new Delete();
+            delete.Project = projects;
+            delete.Photos = photo;
+            delete.Packages = packages;
+            delete.BackersProjects = backetproject;
+
+
             if (projects == null)
                 return NotFound();
 
-            return View(projects);
+            return View(delete);
         }
 
         // POST: Project/Delete/5
@@ -218,6 +229,25 @@ namespace CFProject_T6.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
+
+            var backer = _context.BackersProjects.Where(p => p.ProjectId == id).ToList();
+            foreach (var item in backer)
+                _context.BackersProjects.Remove(item);
+
+            var photos = _context.Photos.Where(p => p.ProjectId == id).ToList();
+            foreach(var item in photos )
+            _context.Photos.Remove(item);
+
+
+            var packages = _context.Packages.Where(p => p.ProjectId == id).ToList();
+            foreach (var item in packages)
+                _context.Packages.Remove(item);
+
+            
+
+            
+
+
             var projects = await _context.Projects.FindAsync(id);
             _context.Projects.Remove(projects);
             await _context.SaveChangesAsync();

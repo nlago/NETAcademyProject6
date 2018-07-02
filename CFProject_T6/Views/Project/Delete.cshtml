@@ -1,4 +1,4 @@
-﻿@model CFProject_T6.Models.Projects
+﻿@model CFProject_T6.Models.Delete
 
 @{
     ViewData["Title"] = "Delete";
@@ -12,57 +12,57 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Project.Title)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Project.Title)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Descr)
+            @Html.DisplayNameFor(model => model.Project.Descr)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Descr)
+            @Html.DisplayFor(model => model.Project.Descr)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Goalfunds)
+            @Html.DisplayNameFor(model => model.Project.Goalfunds)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Goalfunds)
+            @Html.DisplayFor(model => model.Project.Goalfunds)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Fundsrecv)
+            @Html.DisplayNameFor(model => model.Project.Fundsrecv)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Fundsrecv)
+            @Html.DisplayFor(model => model.Project.Fundsrecv)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayNameFor(model => model.Project.StartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.StartDate)
+            @Html.DisplayFor(model => model.Project.StartDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
+            @Html.DisplayNameFor(model => model.Project.EndDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.EndDate)
+            @Html.DisplayFor(model => model.Project.EndDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.DisplayNameFor(model => model.Project.Category)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Category.Name)
+            @Html.DisplayFor(model => model.Project.Category.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Creator)
+            @Html.DisplayNameFor(model => model.Project.Creator)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Creator.Email)
+            @Html.DisplayFor(model => model.Project.Creator.Email)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Project.Id" />
         <input type="submit" value="Delete" class="btn btn-default" /> |
         <a asp-action="MyProjects">Back to List</a>
     </form>

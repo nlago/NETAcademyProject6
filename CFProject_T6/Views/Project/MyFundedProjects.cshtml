@@ -1,18 +1,17 @@
 ﻿@model CFProject_T6.Models.ProjectCategory
 
 @{
-    ViewData["Title"] = "MyFundedProjects";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>MyFundedProjects</h2>
+<h2>MyFunded Projects</h2>
 
 <div class="row">
     @foreach (var item in Model.Projects)
     {
-        <div class="col-md-4 portfolio-item">
+        <div class="col-md-4">
             <a href="@Url.Action("Details", "Project", new { id = item.Project.Id})">
-                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
+                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")"  class="img-responsive" style="height:300px">
             </a>
             <h3>
                 @Html.ActionLink(item.Project.Title, "Details", "Project", new { id = item.Project.Id })

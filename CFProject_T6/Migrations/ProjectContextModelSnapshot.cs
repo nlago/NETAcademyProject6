@@ -148,29 +148,6 @@ namespace CFProject_T6.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("CFProject_T6.Models.Updates", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Descr")
-                        .IsRequired()
-                        .HasColumnType("ntext");
-
-                    b.Property<long>("ProjectId")
-                        .HasColumnName("Project_Id");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("smalldatetime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("Updates");
-                });
-
             modelBuilder.Entity("CFProject_T6.Models.Users", b =>
                 {
                     b.Property<long>("Id")
@@ -231,27 +208,6 @@ namespace CFProject_T6.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("CFProject_T6.Models.Videos", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Filename")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<long>("ProjectId")
-                        .HasColumnName("Project_Id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("Videos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<long>", b =>
@@ -407,22 +363,6 @@ namespace CFProject_T6.Migrations
                         .WithMany("Projects")
                         .HasForeignKey("CreatorId")
                         .HasConstraintName("FK_projects_users");
-                });
-
-            modelBuilder.Entity("CFProject_T6.Models.Updates", b =>
-                {
-                    b.HasOne("CFProject_T6.Models.Projects", "Project")
-                        .WithMany("Updates")
-                        .HasForeignKey("ProjectId")
-                        .HasConstraintName("FK_Updates_Projects");
-                });
-
-            modelBuilder.Entity("CFProject_T6.Models.Videos", b =>
-                {
-                    b.HasOne("CFProject_T6.Models.Projects", "Project")
-                        .WithMany("Videos")
-                        .HasForeignKey("ProjectId")
-                        .HasConstraintName("FK_Videos_Projects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>

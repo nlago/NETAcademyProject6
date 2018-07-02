@@ -130,3 +130,9 @@ footer {
         /* increases the carousel height so it looks good on phones */
     }
 }
+
+
+.thumbnail img {
+    height: 250px;
+    width: 100%;
+}

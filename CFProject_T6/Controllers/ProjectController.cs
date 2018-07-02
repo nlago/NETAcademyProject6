@@ -145,11 +145,16 @@ namespace CFProject_T6.Controllers
                 if (projects == null)
                     return NotFound();
 
-                projects.CreatorId = GetUserID();
+               // projects.CreatorId = GetUserID();
 
                 ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
+                var projectphoto = new ProjectEdit()
+                {
+                    Project = projects
+
+                };
                 
-                return View(projects);
+                return View(projectphoto);
             }
             else
             {
@@ -163,24 +168,38 @@ namespace CFProject_T6.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, Projects projects)
+        public async Task<IActionResult> Edit(long id, ProjectEdit updatedProject)
         {
-            if (id != projects.Id)
+            if (id != updatedProject.Project.Id)
                 return NotFound();
 
-            if ((projects.StartDate <= projects.EndDate) && (projects.EndDate > DateTime.UtcNow.Date))
+            if ((updatedProject.Project.StartDate <= updatedProject.Project.EndDate) && (updatedProject.Project.EndDate > DateTime.UtcNow.Date))
             {
                 if (ModelState.IsValid)
                 {
                     try
                     {
-                        projects.CreatorId = GetUserID();
-                        _context.Update(projects);
+                        updatedProject.Project.CreatorId = GetUserID();
+                        //update photo table
+
+                        var path = $"/uploads/{updatedProject.Photo.FileName}";
+                        var pathForHost = _hostingEnvironment.WebRootPath + $"/uploads/{updatedProject.Photo}";
+
+                        using (var stream = new FileStream(pathForHost, FileMode.Create))
+                        {
+                            await updatedProject.Photo.CopyToAsync(stream);
+                        }                     
+
+                        var target_photo = await _context.Photos.FindAsync(updatedProject.Project.Id);
+
+                        target_photo.Filename = path;
+
+                        _context.Update(updatedProject);
                         await _context.SaveChangesAsync();
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!ProjectsExists(projects.Id))
+                        if (!ProjectsExists(updatedProject.Project.Id))
                             return NotFound();
                         else
                             throw;
@@ -189,9 +208,9 @@ namespace CFProject_T6.Controllers
                 }
                //projects.CreatorId = GetUserID();  
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
+           // ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", updatedproject..CategoryId);
             ViewData["Wrong Date"] = "Check your Start Date and your End Date";
-            return View(projects);
+            return View(updatedProject);
         }
 
         // GET: Project/Delete/5

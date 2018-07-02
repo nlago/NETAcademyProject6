@@ -11,8 +11,7 @@ namespace CFProject_T6.Models
             BackersProjects = new HashSet<BackersProjects>();
             Packages = new HashSet<Packages>();
             Photos = new HashSet<Photos>();
-            Updates = new HashSet<Updates>();
-            Videos = new HashSet<Videos>();
+
         }
         
         public long Id { get; set; }
@@ -39,7 +38,5 @@ namespace CFProject_T6.Models
         public ICollection<BackersProjects> BackersProjects { get; set; }
         public ICollection<Packages> Packages { get; set; }
         public ICollection<Photos> Photos { get; set; }
-        public ICollection<Updates> Updates { get; set; }
-        public ICollection<Videos> Videos { get; set; }
     }
 }

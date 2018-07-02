@@ -22,8 +22,6 @@ namespace CFProject_T6.Models
         public virtual DbSet<Packages> Packages { get; set; }
         public virtual DbSet<Photos> Photos { get; set; }
         public virtual DbSet<Projects> Projects { get; set; }
-        public virtual DbSet<Updates> Updates { get; set; }
-        public virtual DbSet<Videos> Videos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -139,23 +137,6 @@ namespace CFProject_T6.Models
                     .HasConstraintName("FK_projects_users");
             });
 
-            modelBuilder.Entity<Updates>(entity =>
-            {
-                entity.Property(e => e.Descr)
-                    .IsRequired()
-                    .HasColumnType("ntext");
-
-                entity.Property(e => e.ProjectId).HasColumnName("Project_Id");
-
-                entity.Property(e => e.Timestamp).HasColumnType("smalldatetime");
-
-                entity.HasOne(d => d.Project)
-                    .WithMany(p => p.Updates)
-                    .HasForeignKey(d => d.ProjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Updates_Projects");
-            });
-
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.Property(e => e.Email)
@@ -184,22 +165,6 @@ namespace CFProject_T6.Models
                 //entity.Property(e => e.ProfileUrl).HasMaxLength(255);
 
 
-            });
-
-            modelBuilder.Entity<Videos>(entity =>
-            {
-                entity.Property(e => e.Filename)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ProjectId).HasColumnName("Project_Id");
-
-                entity.HasOne(d => d.Project)
-                    .WithMany(p => p.Videos)
-                    .HasForeignKey(d => d.ProjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Videos_Projects");
             });
         }
     }

@@ -244,47 +244,6 @@ namespace CFProject_T6.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Updates",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Project_Id = table.Column<long>(nullable: false),
-                    Descr = table.Column<string>(type: "ntext", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "smalldatetime", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Updates", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Updates_Projects",
-                        column: x => x.Project_Id,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Videos",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Project_Id = table.Column<long>(nullable: false),
-                    Filename = table.Column<string>(unicode: false, maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Videos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Videos_Projects",
-                        column: x => x.Project_Id,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Backers_projects",
                 columns: table => new
                 {
@@ -391,15 +350,6 @@ namespace CFProject_T6.Migrations
                 table: "Projects",
                 column: "Creator_Id");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Updates_Project_Id",
-                table: "Updates",
-                column: "Project_Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Videos_Project_Id",
-                table: "Videos",
-                column: "Project_Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -424,12 +374,6 @@ namespace CFProject_T6.Migrations
 
             migrationBuilder.DropTable(
                 name: "Photos");
-
-            migrationBuilder.DropTable(
-                name: "Updates");
-
-            migrationBuilder.DropTable(
-                name: "Videos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

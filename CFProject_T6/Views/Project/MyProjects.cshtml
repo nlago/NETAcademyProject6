@@ -1,7 +1,7 @@
 ﻿<!-- IEnumerable<CFProject_T6.Models.Projects> -->
 @model CFProject_T6.Models.ProjectCategory
 @{
-    ViewData["Title"] = "MyProjects";
+    ViewData["Title"] = "My Projects";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -13,7 +13,7 @@
     {
         <div class="col-md-4 portfolio-item">
             <a href="@Url.Action("Details", "Project", new { id = item.Project.Id})">
-                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
+                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive" style="height:300px">
             </a>
             <h3>
                 @Html.ActionLink(item.Project.Title, "Details", "Project", new { id = item.Project.Id })

@@ -1,35 +1,39 @@
 ﻿@model CFProject_T6.Models.ProjectCategory
 
 @{
-    ViewData["Title"] = "Search";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>Search</h2>
 
 <form class="search-tilte" method="get">
     <lable>Search title :</lable>
     <input type="text" id="get-title" name="title" />
-    <lable>Search Category</lable>
-
-    <select id="select-category" name="idd">
-        <option value="">Choose a Category</option>
-
-        @foreach (var category in Model.Categories)
-        {
-            <option value="@category.Id">@category.Name</option>
-        }
-    </select>
     <button type="submit" id="button-search">Search</button>
 
 </form>
 
 <div class="row">
+        <h4>Make your Search by choosing one of the Categories.</h4>
+        <table class="table">
+            <tr>
+                <th>
+                    <a asp-controller="Project" asp-action="Search" asp-route-idd="" asp-route-title="">All</a>
+                </th>
+                @foreach (var item in Model.Categories)
+                {
+                    <th>
+                        <a asp-controller="Project" asp-action="Search" asp-route-idd="@item.Id" asp-route-title="">@item.Name</a>
+                    </th>
+                }
+            </tr>
+        </table>
+</div>
+
+<div class="row">
     @foreach (var item in Model.Projects)
     {
-        <div class="col-md-4 portfolio-item">
+        <div class="col-md-4">
             <a href="@Url.Action("Details", "Project", new { id = item.Project.Id})">
-                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive">
+                <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive" style="height:300px">
             </a>
             <h3>
                 @Html.ActionLink(item.Project.Title, "Details", "Project", new { id = item.Project.Id })
@@ -37,5 +41,5 @@
             <p>@item.Project.Descr</p>
         </div>
     }
-   </div>
+</div>
 

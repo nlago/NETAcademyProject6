@@ -31,7 +31,7 @@
 <div class="row">
     @foreach (var item in Model.Projects)
     {
-        <div class="col-md-4">
+        <div class="col-md-4" style="height:500px">
             <a href="@Url.Action("Details", "Project", new { id = item.Project.Id})">
                 <img src="@Url.Content($"{item.Photo?.Filename ?? "teamfoto3.jpg"}")" class="img-responsive" style="height:300px">
             </a>

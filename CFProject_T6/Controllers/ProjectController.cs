@@ -145,16 +145,11 @@ namespace CFProject_T6.Controllers
                 if (projects == null)
                     return NotFound();
 
-               // projects.CreatorId = GetUserID();
+                projects.CreatorId = GetUserID();
 
                 ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
-                var projectphoto = new ProjectEdit()
-                {
-                    Project = projects
 
-                };
-                
-                return View(projectphoto);
+                return View(projects);
             }
             else
             {
@@ -168,49 +163,35 @@ namespace CFProject_T6.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, ProjectEdit updatedProject)
+        public async Task<IActionResult> Edit(long id, Projects projects)
         {
-            if (id != updatedProject.Project.Id)
+            if (id != projects.Id)
                 return NotFound();
 
-            if ((updatedProject.Project.StartDate <= updatedProject.Project.EndDate) && (updatedProject.Project.EndDate > DateTime.UtcNow.Date))
+            if ((projects.StartDate <= projects.EndDate) && (projects.EndDate > DateTime.UtcNow.Date))
             {
                 if (ModelState.IsValid)
                 {
                     try
                     {
-                        updatedProject.Project.CreatorId = GetUserID();
-                        //update photo table
-
-                        var path = $"/uploads/{updatedProject.Photo.FileName}";
-                        var pathForHost = _hostingEnvironment.WebRootPath + $"/uploads/{updatedProject.Photo}";
-
-                        using (var stream = new FileStream(pathForHost, FileMode.Create))
-                        {
-                            await updatedProject.Photo.CopyToAsync(stream);
-                        }                     
-
-                        var target_photo = await _context.Photos.FindAsync(updatedProject.Project.Id);
-
-                        target_photo.Filename = path;
-
-                        _context.Update(updatedProject);
+                        projects.CreatorId = GetUserID();
+                        _context.Update(projects);
                         await _context.SaveChangesAsync();
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!ProjectsExists(updatedProject.Project.Id))
+                        if (!ProjectsExists(projects.Id))
                             return NotFound();
                         else
                             throw;
                     }
                     return RedirectToAction(nameof(Index));
                 }
-               //projects.CreatorId = GetUserID();  
+                //projects.CreatorId = GetUserID();  
             }
-           // ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", updatedproject..CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", projects.CategoryId);
             ViewData["Wrong Date"] = "Check your Start Date and your End Date";
-            return View(updatedProject);
+            return View(projects);
         }
 
         // GET: Project/Delete/5

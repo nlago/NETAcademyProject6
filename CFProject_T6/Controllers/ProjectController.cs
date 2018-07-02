@@ -311,10 +311,7 @@ namespace CFProject_T6.Controllers
                                                                         .Where(p => p.Id == item).SingleOrDefault());
             }
 
-            if (myFundedProjectsContext.Count == 0)
-                return NotFound();
-            else
-            {
+           
                 var myFundedProjects = new ProjectCategory();
                 var allPhotos = _context.Photos;
                 var UIProjectList = myFundedProjectsContext.Select(p => new ProjectSearchResultVM
@@ -326,7 +323,7 @@ namespace CFProject_T6.Controllers
                 myFundedProjects.Projects = UIProjectList.ToList();
 
                 return View(myFundedProjects);
-            }
+            
 
         }
     }
